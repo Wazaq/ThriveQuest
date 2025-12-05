@@ -38,9 +38,9 @@
 
 					<!-- Navigation -->
 					<nav class="hidden md:flex items-center gap-6">
-						<a href="/" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Dashboard</a>
-						<a href="/journal" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">Journal</a>
-						<a href="/about" class="text-gray-700 dark:text-gray-300 hover:text-primary transition-colors">About</a>
+						<a href="/" class="text-gray-900 dark:text-gray-100 hover:text-primary font-medium transition-colors">Dashboard</a>
+						<a href="/journal" class="text-gray-900 dark:text-gray-100 hover:text-primary font-medium transition-colors">Journal</a>
+						<a href="/about" class="text-gray-900 dark:text-gray-100 hover:text-primary font-medium transition-colors">About</a>
 					</nav>
 
 					<!-- Actions -->
@@ -65,7 +65,7 @@
 						<!-- Logout -->
 						<button
 							onclick={handleLogout}
-							class="hidden md:block text-gray-700 dark:text-gray-300 hover:text-primary transition-colors"
+							class="hidden md:block text-gray-900 dark:text-gray-100 hover:text-primary font-medium transition-colors"
 						>
 							Logout
 						</button>

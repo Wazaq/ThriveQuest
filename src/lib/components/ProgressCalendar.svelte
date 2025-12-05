@@ -7,6 +7,11 @@
 
 	let { completionDates = [] }: Props = $props();
 
+	// Debug: log completion dates
+	$effect(() => {
+		console.log('Calendar completionDates:', completionDates);
+	});
+
 	// Get current month info
 	const now = new Date();
 	const currentYear = now.getFullYear();
@@ -62,9 +67,9 @@
 				<div
 					class="aspect-square flex items-center justify-center rounded-lg text-sm font-medium transition-all
 						{isCompleted(day)
-							? 'bg-primary text-white shadow-md'
+							? 'bg-primary text-white shadow-md font-bold'
 							: isToday(day)
-								? 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 ring-2 ring-primary'
+								? 'bg-primary/20 dark:bg-primary/30 text-gray-900 dark:text-gray-100 ring-2 ring-primary font-bold'
 								: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
 						}"
 				>
