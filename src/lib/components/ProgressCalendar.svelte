@@ -1,91 +1,87 @@
-<!-- src/lib/components/ProgressCalendar.svelte -->
 <script lang="ts">
-  export let completionDates: string[] = [];
+	import Card from '$lib/components/ui/Card.svelte';
 
-  // Get current month info
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth();
+	interface Props {
+		completionDates?: string[];
+	}
 
-  // Get first day of month and total days
-  const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+	let { completionDates = [] }: Props = $props();
 
-  // Generate array of days
-  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+	// Get current month info
+	const now = new Date();
+	const currentYear = now.getFullYear();
+	const currentMonth = now.getMonth();
+	const currentDay = now.getDate();
 
-  // Check if a date is completed
-  function isCompleted(day: number): boolean {
-    const dateStr = new Date(currentYear, currentMonth, day).toISOString().split('T')[0];
-    return completionDates.includes(dateStr);
-  }
+	// Get first day of month and total days
+	const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+	const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-  // Month names
-  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'];
+	// Generate array of days
+	const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+	// Check if a date is completed
+	function isCompleted(day: number): boolean {
+		const dateStr = new Date(currentYear, currentMonth, day).toISOString().split('T')[0];
+		return completionDates.includes(dateStr);
+	}
+
+	// Check if day is today
+	function isToday(day: number): boolean {
+		return day === currentDay;
+	}
+
+	// Month names
+	const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+		'July', 'August', 'September', 'October', 'November', 'December'];
+
+	const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 </script>
 
-<div class="calendar">
-  <h2>{monthNames[currentMonth]} {currentYear}</h2>
+<Card>
+	<div class="space-y-4">
+		<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+			{monthNames[currentMonth]} {currentYear}
+		</h2>
 
-  <div class="calendar-grid">
-    <!-- Day headers -->
-    <div class="day-header">Sun</div>
-    <div class="day-header">Mon</div>
-    <div class="day-header">Tue</div>
-    <div class="day-header">Wed</div>
-    <div class="day-header">Thu</div>
-    <div class="day-header">Fri</div>
-    <div class="day-header">Sat</div>
+		<div class="grid grid-cols-7 gap-2">
+			<!-- Day headers -->
+			{#each dayHeaders as dayName}
+				<div class="text-center text-xs font-medium text-gray-600 dark:text-gray-400 py-2">
+					{dayName}
+				</div>
+			{/each}
 
-    <!-- Empty cells for days before month starts -->
-    {#each Array(firstDay) as _}
-      <div class="day empty"></div>
-    {/each}
+			<!-- Empty cells for days before month starts -->
+			{#each Array(firstDay) as _}
+				<div class="aspect-square"></div>
+			{/each}
 
-    <!-- Actual days -->
-    {#each days as day}
-      <div class="day" class:completed={isCompleted(day)}>
-        {day}
-      </div>
-    {/each}
-  </div>
-</div>
+			<!-- Actual days -->
+			{#each days as day}
+				<div
+					class="aspect-square flex items-center justify-center rounded-lg text-sm font-medium transition-all
+						{isCompleted(day)
+							? 'bg-primary text-white shadow-md'
+							: isToday(day)
+								? 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 ring-2 ring-primary'
+								: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+						}"
+				>
+					{day}
+				</div>
+			{/each}
+		</div>
 
-<style>
-  .calendar {
-    margin: 2rem 0;
-  }
-
-  .calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 0.5rem;
-    max-width: 500px;
-  }
-
-  .day-header {
-    font-weight: bold;
-    text-align: center;
-    padding: 0.5rem;
-  }
-
-  .day {
-    aspect-ratio: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-
-  .day.empty {
-    border: none;
-  }
-
-  .day.completed {
-    background-color: #4ade80;
-    color: white;
-    font-weight: bold;
-  }
-</style>
+		<div class="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-400">
+			<div class="flex items-center gap-2">
+				<div class="w-4 h-4 rounded bg-primary"></div>
+				<span>Completed</span>
+			</div>
+			<div class="flex items-center gap-2">
+				<div class="w-4 h-4 rounded bg-gray-200 dark:bg-gray-700 ring-2 ring-primary"></div>
+				<span>Today</span>
+			</div>
+		</div>
+	</div>
+</Card>
