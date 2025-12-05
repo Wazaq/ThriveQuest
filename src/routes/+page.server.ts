@@ -12,6 +12,16 @@ export const load = async ({ locals }) => {
         where: { domain: 'Accomplishment' }
     });
 
-    // You will fetch completions here later
-    return { quests };
+    // Fetch today's completions
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const completions = await prisma.questCompletion.findMany({
+        where: {
+            userId: locals.user.id,
+            date: today
+        }
+    });
+
+    return { quests, completions };
 };
