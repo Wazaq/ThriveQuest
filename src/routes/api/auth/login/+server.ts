@@ -1,9 +1,8 @@
 // src/routes/api/auth/login/+server.ts
-// src/routes/api/auth/login/+server.ts
 import type { RequestEvent } from '@sveltejs/kit';
 import { PrismaClient } from '@prisma/client';
 import { json } from '@sveltejs/kit';
-import bcrypt from 'bcryptjs';
+import { verifyPassword } from '$lib/crypto';
 import jwt from 'jsonwebtoken';
 import { env } from '$env/dynamic/private';
 
@@ -19,7 +18,7 @@ export async function POST({ request, cookies }: RequestEvent) {
         return json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = await verifyPassword(password, user.password);
     if (!passwordMatch) {
         return json({ error: 'Invalid credentials' }, { status: 401 });
     }

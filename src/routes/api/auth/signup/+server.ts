@@ -1,7 +1,7 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import { PrismaClient } from '@prisma/client';
 import { json } from '@sveltejs/kit';
-import bcrypt from 'bcryptjs';
+import { hashPassword } from '$lib/crypto';
 
 const prisma = new PrismaClient();
 
@@ -17,7 +17,7 @@ export async function POST({ request }: RequestEvent) {
         return json({ error: 'User with that email already exists' }, { status: 409 });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hashPassword(password);
 
     const user = await prisma.user.create({
         data: {
