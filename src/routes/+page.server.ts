@@ -4,18 +4,21 @@ import { getDB, schema } from '$lib/db';
 import { eq, and, gte } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals, platform }) => {
+export const load: PageServerLoad = async ({ locals, platform, url }) => {
     if (!locals.user) {
         throw redirect(303, '/login');
     }
 
     const db = getDB(platform!.env.DB);
 
-    // Fetch quests
+    // Get selected domain from query param or default to Accomplishment
+    const selectedDomain = url.searchParams.get('domain') || 'Accomplishment';
+
+    // Fetch quests for selected domain
     const quests = await db
         .select()
         .from(schema.quests)
-        .where(eq(schema.quests.domain, 'Accomplishment'))
+        .where(eq(schema.quests.domain, selectedDomain))
         .all();
 
     // Fetch ALL completions for calendar
@@ -46,5 +49,22 @@ export const load: PageServerLoad = async ({ locals, platform }) => {
         )
         .all();
 
-    return { quests, completions, completionDates: [...new Set(completionDates)] };
+    // Get quest counts per domain for badges
+    const allQuests = await db
+        .select()
+        .from(schema.quests)
+        .all();
+
+    const questCounts = allQuests.reduce((acc, quest) => {
+        acc[quest.domain] = (acc[quest.domain] || 0) + 1;
+        return acc;
+    }, {} as Record<string, number>);
+
+    return {
+        quests,
+        completions,
+        completionDates: [...new Set(completionDates)],
+        selectedDomain,
+        questCounts
+    };
 };

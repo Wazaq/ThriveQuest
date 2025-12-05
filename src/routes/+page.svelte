@@ -1,9 +1,25 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
 	import ProgressCalendar from '$lib/components/ProgressCalendar.svelte';
 	import WeeklyProgress from '$lib/components/progress/WeeklyProgress.svelte';
 	import QuestList from '$lib/components/quests/QuestList.svelte';
+	import DomainSelector from '$lib/components/domains/DomainSelector.svelte';
 
-	export let data;
+	let { data } = $props();
+
+	// Initialize selected domain from data or localStorage
+	let selectedDomain = $state(data.selectedDomain);
+
+	$effect(() => {
+		// On mount, check localStorage for saved domain
+		if (browser) {
+			const saved = localStorage.getItem('selectedDomain');
+			if (saved && saved !== selectedDomain) {
+				goto(`/?domain=${encodeURIComponent(saved)}`, { replaceState: true });
+			}
+		}
+	});
 
 	// Calculate weekly progress (5 out of 7 principle)
 	function getWeeklyProgress(): number {
@@ -32,6 +48,10 @@
 	const completedThisWeek = getWeeklyProgress();
 	const currentDayOfWeek = new Date().getDay();
 
+	function handleDomainChange(domain: string) {
+		goto(`/?domain=${encodeURIComponent(domain)}`, { replaceState: true });
+	}
+
 	async function handleComplete(questId: number) {
 		const response = await fetch('/api/completions', {
 			method: 'POST',
@@ -44,6 +64,15 @@
 			window.location.reload();
 		}
 	}
+
+	// Map domain to color key
+	const domainColorMap: Record<string, string> = {
+		'Positive Emotion': 'positive',
+		'Engagement': 'engagement',
+		'Relationships': 'relationships',
+		'Meaning': 'meaning',
+		'Accomplishment': 'accomplishment'
+	};
 </script>
 
 <div class="space-y-6">
@@ -64,12 +93,21 @@
 		completionDates={data.completionDates}
 	/>
 
-	<!-- Quest List -->
-	<QuestList
-		quests={data.quests}
-		completions={data.completions}
-		onComplete={handleComplete}
-	/>
+	<!-- Domain Selector & Quest List -->
+	<div>
+		<DomainSelector
+			{selectedDomain}
+			onDomainChange={handleDomainChange}
+			questCounts={data.questCounts}
+		/>
+		<QuestList
+			quests={data.quests}
+			completions={data.completions}
+			onComplete={handleComplete}
+			domainTitle={selectedDomain}
+			domainColor={domainColorMap[selectedDomain]}
+		/>
+	</div>
 
 	<!-- Calendar -->
 	<ProgressCalendar completionDates={data.completionDates} />

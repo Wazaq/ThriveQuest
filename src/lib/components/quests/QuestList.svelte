@@ -1,6 +1,5 @@
 <script lang="ts">
 	import QuestItem from './QuestItem.svelte';
-	import Card from '$lib/components/ui/Card.svelte';
 
 	interface Props {
 		quests: Array<{
@@ -10,19 +9,29 @@
 		}>;
 		completions: Array<{ questId: number }>;
 		onComplete: (questId: number) => void;
+		domainTitle: string;
+		domainColor: string;
 	}
 
-	let { quests, completions, onComplete }: Props = $props();
+	let { quests, completions, onComplete, domainTitle, domainColor }: Props = $props();
 
 	function isCompleted(questId: number): boolean {
 		return completions.some(c => c.questId === questId);
 	}
+
+	const colorMap: Record<string, string> = {
+		positive: 'border-positive',
+		engagement: 'border-engagement',
+		relationships: 'border-relationships',
+		meaning: 'border-meaning',
+		accomplishment: 'border-accomplishment'
+	};
 </script>
 
-<Card>
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 border-t-8 {colorMap[domainColor]} p-6 transition-all duration-300">
 	<div class="space-y-3">
 		<h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-			Accomplishment Quests
+			{domainTitle} Quests
 		</h2>
 
 		{#if quests.length === 0}
@@ -41,4 +50,4 @@
 			</div>
 		{/if}
 	</div>
-</Card>
+</div>
