@@ -49,7 +49,8 @@
 	const currentDayOfWeek = new Date().getDay();
 
 	function handleDomainChange(domain: string) {
-		goto(`/?domain=${encodeURIComponent(domain)}`, { replaceState: true });
+		selectedDomain = domain;
+		goto(`/?domain=${encodeURIComponent(domain)}`, { replaceState: true, noScroll: true });
 	}
 
 	async function handleComplete(questId: number) {
