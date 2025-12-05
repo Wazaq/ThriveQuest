@@ -22,3 +22,12 @@ export const questCompletions = sqliteTable('QuestCompletion', {
   userId: integer('userId').notNull().references(() => users.id),
   questId: integer('questId').notNull().references(() => quests.id)
 });
+
+export const journalEntries = sqliteTable('journal_entries', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('user_id').notNull().references(() => users.id),
+  date: text('date').notNull(), // Store as 'YYYY-MM-DD'
+  content: text('content').notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(unixepoch())`)
+});
