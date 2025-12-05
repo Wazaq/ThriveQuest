@@ -1,9 +1,9 @@
 // src/routes/api/completions/+server.ts
-import { PrismaClient } from '@prisma/client';
 import { json } from '@sveltejs/kit';
-const prisma = new PrismaClient();
+import { getDB, schema } from '$lib/db';
+import type { RequestEvent } from '@sveltejs/kit';
 
-export async function POST({ request, locals }) {
+export async function POST({ request, locals, platform }: RequestEvent) {
     if (!locals.user) {
         return json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -12,13 +12,16 @@ export async function POST({ request, locals }) {
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Normalize to start of day
 
-    const completion = await prisma.questCompletion.create({
-        data: {
+    const db = getDB(platform!.env.DB);
+
+    const result = await db
+        .insert(schema.questCompletions)
+        .values({
             userId: locals.user.id,
             questId: questId,
-            date: today,
-        }
-    });
+            date: today
+        })
+        .returning();
 
-    return json(completion, { status: 201 });
+    return json(result[0], { status: 201 });
 }

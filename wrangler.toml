@@ -1,0 +1,10 @@
+# wrangler.toml
+name = "thrivequest"
+compatibility_date = "2025-12-04"
+pages_build_output_dir = ".svelte-kit/cloudflare"
+
+# D1 database binding (we'll add this after creating the D1 database)
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "thrivequest-db"
+# database_id = "YOUR_DATABASE_ID"

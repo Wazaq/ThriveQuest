@@ -1,30 +1,39 @@
 import type { RequestEvent } from '@sveltejs/kit';
-import { PrismaClient } from '@prisma/client';
 import { json } from '@sveltejs/kit';
 import { hashPassword } from '$lib/crypto';
+import { getDB, schema } from '$lib/db';
+import { eq } from 'drizzle-orm';
 
-const prisma = new PrismaClient();
-
-export async function POST({ request }: RequestEvent) {
+export async function POST({ request, platform }: RequestEvent) {
     const { email, password } = await request.json();
 
     if (!email || !password) {
         return json({ error: 'Email and password are required' }, { status: 400 });
     }
 
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const db = getDB(platform!.env.DB);
+
+    // Check if user exists
+    const existingUser = await db
+        .select()
+        .from(schema.users)
+        .where(eq(schema.users.email, email))
+        .get();
+
     if (existingUser) {
         return json({ error: 'User with that email already exists' }, { status: 409 });
     }
 
     const hashedPassword = await hashPassword(password);
 
-    const user = await prisma.user.create({
-        data: {
+    // Create user
+    const result = await db
+        .insert(schema.users)
+        .values({
             email,
-            password: hashedPassword,
-        },
-    });
+            password: hashedPassword
+        })
+        .returning();
 
-    return json({ message: 'User created successfully', userId: user.id }, { status: 201 });
+    return json({ message: 'User created successfully', userId: result[0].id }, { status: 201 });
 }

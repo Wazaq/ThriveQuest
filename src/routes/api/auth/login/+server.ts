@@ -1,19 +1,23 @@
 // src/routes/api/auth/login/+server.ts
 import type { RequestEvent } from '@sveltejs/kit';
-import { PrismaClient } from '@prisma/client';
 import { json } from '@sveltejs/kit';
 import { verifyPassword } from '$lib/crypto';
 import { signJWT } from '$lib/jwt';
-import { env } from '$env/dynamic/private';
+import { getDB, schema } from '$lib/db';
+import { eq } from 'drizzle-orm';
 
-const prisma = new PrismaClient();
-// IMPORTANT: Add JWT_SECRET to your .env file!
-const jwtSecret = env.JWT_SECRET || 'DEFAULT_SECRET_CHANGE_IN_PROD';
-
-export async function POST({ request, cookies }: RequestEvent) {
+export async function POST({ request, cookies, platform }: RequestEvent) {
     const { email, password } = await request.json();
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    const db = getDB(platform!.env.DB);
+    const jwtSecret = platform!.env.JWT_SECRET || 'DEFAULT_SECRET_CHANGE_IN_PROD';
+
+    const user = await db
+        .select()
+        .from(schema.users)
+        .where(eq(schema.users.email, email))
+        .get();
+
     if (!user) {
         return json({ error: 'Invalid credentials' }, { status: 401 });
     }

@@ -11,7 +11,16 @@ declare global {
 		}
 		// interface PageData {}
 		// interface PageState {}
-		// interface Platform {}
+		interface Platform {
+			env: {
+				DB: D1Database;
+				JWT_SECRET: string;
+			};
+			context: {
+				waitUntil(promise: Promise<any>): void;
+			};
+			caches: CacheStorage & { default: Cache };
+		}
 	}
 }
 
