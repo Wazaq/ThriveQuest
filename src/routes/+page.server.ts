@@ -52,7 +52,7 @@ export const load: PageServerLoad = async ({ locals, platform, url }) => {
         )
         .all();
 
-    // Get incomplete quest counts per domain for badges
+    // Get quest counts per domain
     const allQuests = await db
         .select()
         .from(schema.quests)
@@ -61,8 +61,14 @@ export const load: PageServerLoad = async ({ locals, platform, url }) => {
     // Get completed quest IDs for today
     const completedQuestIds = new Set(completions.map(c => c.questId));
 
-    // Count only incomplete quests per domain
-    const questCounts = allQuests.reduce((acc, quest) => {
+    // Count total quests per domain (for tab availability)
+    const totalQuestCounts = allQuests.reduce((acc, quest) => {
+        acc[quest.domain] = (acc[quest.domain] || 0) + 1;
+        return acc;
+    }, {} as Record<string, number>);
+
+    // Count only incomplete quests per domain (for badges)
+    const incompleteQuestCounts = allQuests.reduce((acc, quest) => {
         if (!completedQuestIds.has(quest.id)) {
             acc[quest.domain] = (acc[quest.domain] || 0) + 1;
         }
@@ -74,6 +80,7 @@ export const load: PageServerLoad = async ({ locals, platform, url }) => {
         completions,
         completionDates: [...new Set(completionDates)],
         selectedDomain,
-        questCounts
+        totalQuestCounts,
+        incompleteQuestCounts
     };
 };

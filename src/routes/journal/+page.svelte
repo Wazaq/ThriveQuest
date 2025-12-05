@@ -8,6 +8,7 @@
 	let lastSaved = $state('');
 	let cloudSynced = $state(false);
 	let saving = $state(false);
+	let showPrompts = $state(false);
 
 	// Get today's date in YYYY-MM-DD format
 	const todayDate = new Date().toISOString().split('T')[0];
@@ -125,9 +126,20 @@
 	<Card>
 		<div class="space-y-4">
 			<div class="flex items-center justify-between flex-wrap gap-3">
-				<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-					Today's Reflections
-				</h2>
+				<div class="flex items-center gap-2">
+					<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+						Today's Reflections
+					</h2>
+					<button
+						onclick={() => showPrompts = !showPrompts}
+						class="p-1.5 text-gray-500 dark:text-gray-400 hover:text-primary transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+						aria-label="Show journal prompts"
+					>
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
+						</svg>
+					</button>
+				</div>
 				<div class="flex items-center gap-3">
 					{#if cloudSynced}
 						<span class="flex items-center gap-1 text-xs text-primary">
@@ -168,21 +180,41 @@
 		</div>
 	</Card>
 
-	<Card padding="sm">
-		<details class="group">
-			<summary class="cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300 list-none flex items-center justify-between">
-				<span>Journaling Prompts</span>
-				<svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-				</svg>
-			</summary>
-			<div class="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-400">
-				<p>• What am I grateful for today?</p>
-				<p>• What progress did I make toward my goals?</p>
-				<p>• What challenged me today, and what did I learn?</p>
-				<p>• How did I show up for myself or others?</p>
-				<p>• What do I want to focus on tomorrow?</p>
+	<!-- Prompts Overlay -->
+	{#if showPrompts}
+		<div
+			class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+			onclick={() => showPrompts = false}
+		>
+			<div
+				class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6"
+				onclick={(e) => e.stopPropagation()}
+			>
+				<div class="flex items-center justify-between mb-4">
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+						<svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
+							<path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
+						</svg>
+						Journaling Prompts
+					</h3>
+					<button
+						onclick={() => showPrompts = false}
+						class="p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+						aria-label="Close prompts"
+					>
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+						</svg>
+					</button>
+				</div>
+				<div class="space-y-3 text-sm text-gray-600 dark:text-gray-400">
+					<p>• What am I grateful for today?</p>
+					<p>• What progress did I make toward my goals?</p>
+					<p>• What challenged me today, and what did I learn?</p>
+					<p>• How did I show up for myself or others?</p>
+					<p>• What do I want to focus on tomorrow?</p>
+				</div>
 			</div>
-		</details>
-	</Card>
+		</div>
+	{/if}
 </div>

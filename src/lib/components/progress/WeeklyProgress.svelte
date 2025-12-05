@@ -27,6 +27,21 @@
 		return completionDates.includes(dateStr);
 	}
 
+	// Get the date for each day of the week
+	function getDayDate(dayIndex: number): string {
+		const today = new Date();
+		const weekStart = new Date(today);
+		weekStart.setDate(today.getDate() - currentDayOfWeek);
+		weekStart.setHours(0, 0, 0, 0);
+
+		const checkDate = new Date(weekStart);
+		checkDate.setDate(weekStart.getDate() + dayIndex);
+
+		const month = checkDate.getMonth() + 1;
+		const day = checkDate.getDate();
+		return `${month}/${day}`;
+	}
+
 	let goalMet = $derived(completedDays >= 5);
 </script>
 
@@ -44,7 +59,7 @@
 		<!-- Visual week representation -->
 		<div class="flex justify-between gap-2">
 			{#each dayNames as day, index}
-				<div class="flex flex-col items-center gap-2 flex-1">
+				<div class="flex flex-col items-center gap-1 flex-1">
 					<div
 						class="w-10 h-10 rounded-full flex items-center justify-center font-medium text-sm transition-all
 							{isDayCompleted(index)
@@ -64,6 +79,9 @@
 					</div>
 					<span class="text-xs text-gray-500 dark:text-gray-400">
 						{day}
+					</span>
+					<span class="text-xs text-gray-400 dark:text-gray-500">
+						{getDayDate(index)}
 					</span>
 				</div>
 			{/each}

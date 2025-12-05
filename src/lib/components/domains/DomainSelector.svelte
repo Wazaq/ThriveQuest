@@ -4,10 +4,11 @@
 	interface Props {
 		selectedDomain: string;
 		onDomainChange: (domain: string) => void;
-		questCounts?: Record<string, number>;
+		totalQuestCounts?: Record<string, number>;
+		incompleteQuestCounts?: Record<string, number>;
 	}
 
-	let { selectedDomain, onDomainChange, questCounts = {} }: Props = $props();
+	let { selectedDomain, onDomainChange, totalQuestCounts = {}, incompleteQuestCounts = {} }: Props = $props();
 
 	const domains = [
 		{ id: 'Positive Emotion', letter: 'P', color: 'positive', label: 'Positive Emotion' },
@@ -37,8 +38,9 @@
 <div class="flex gap-2 mb-4">
 	{#each domains as domain}
 		{@const isSelected = selectedDomain === domain.id}
-		{@const questCount = questCounts[domain.id] || 0}
-		{@const hasQuests = questCount > 0}
+		{@const totalQuests = totalQuestCounts[domain.id] || 0}
+		{@const incompleteQuests = incompleteQuestCounts[domain.id] || 0}
+		{@const hasQuests = totalQuests > 0}
 
 		<button
 			onclick={() => selectDomain(domain.id)}
@@ -61,10 +63,10 @@
 				</span>
 			</div>
 
-			<!-- Quest count badge -->
-			{#if hasQuests && questCount > 0}
+			<!-- Quest count badge (show incomplete count) -->
+			{#if hasQuests && incompleteQuests > 0}
 				<div class="absolute top-1 right-1 bg-gray-900 dark:bg-gray-950 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-					{questCount}
+					{incompleteQuests}
 				</div>
 			{/if}
 		</button>

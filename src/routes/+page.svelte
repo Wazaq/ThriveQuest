@@ -99,7 +99,8 @@
 		<DomainSelector
 			{selectedDomain}
 			onDomainChange={handleDomainChange}
-			questCounts={data.questCounts}
+			totalQuestCounts={data.totalQuestCounts}
+			incompleteQuestCounts={data.incompleteQuestCounts}
 		/>
 		<QuestList
 			quests={data.quests}
