@@ -3,7 +3,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { PrismaClient } from '@prisma/client';
 import { json } from '@sveltejs/kit';
 import { verifyPassword } from '$lib/crypto';
-import jwt from 'jsonwebtoken';
+import { signJWT } from '$lib/jwt';
 import { env } from '$env/dynamic/private';
 
 const prisma = new PrismaClient();
@@ -23,7 +23,7 @@ export async function POST({ request, cookies }: RequestEvent) {
         return json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    const token = jwt.sign({ userId: user.id, email: user.email }, jwtSecret, { expiresIn: '7d' });
+    const token = await signJWT({ userId: user.id, email: user.email }, jwtSecret, '7d');
 
     // Set token in an HttpOnly cookie
     cookies.set('auth_token', token, {
