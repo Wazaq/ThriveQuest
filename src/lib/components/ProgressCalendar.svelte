@@ -7,11 +7,6 @@
 
 	let { completionDates = [] }: Props = $props();
 
-	// Debug: log completion dates
-	$effect(() => {
-		console.log('Calendar completionDates:', completionDates);
-	});
-
 	// Get current month info
 	const now = new Date();
 	const currentYear = now.getFullYear();
@@ -27,7 +22,11 @@
 
 	// Check if a date is completed
 	function isCompleted(day: number): boolean {
-		const dateStr = new Date(currentYear, currentMonth, day).toISOString().split('T')[0];
+		// Format date as YYYY-MM-DD without timezone issues
+		const year = currentYear;
+		const month = String(currentMonth + 1).padStart(2, '0');
+		const dayStr = String(day).padStart(2, '0');
+		const dateStr = `${year}-${month}-${dayStr}`;
 		return completionDates.includes(dateStr);
 	}
 
