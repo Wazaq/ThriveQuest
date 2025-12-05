@@ -12,7 +12,16 @@ export const load = async ({ locals }) => {
         where: { domain: 'Accomplishment' }
     });
 
-    // Fetch today's completions
+    // Fetch ALL completions for calendar
+    const allCompletions = await prisma.questCompletion.findMany({
+        where: { userId: locals.user.id},
+        select: {date: true} // Only select the date
+    });
+
+    // Pass dates as strings to avoid serialization issues
+    const completionDates = allCompletions.map(c => c.date.toISOString().split('T')[0]);
+
+    // Fetch today's completions for quest buttons
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -23,5 +32,5 @@ export const load = async ({ locals }) => {
         }
     });
 
-    return { quests, completions };
+    return { quests, completions, completionDates: [...new Set(completionDates)] };
 };
