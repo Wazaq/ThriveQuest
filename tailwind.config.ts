@@ -9,9 +9,9 @@ export default {
 		extend: {
 			colors: {
 				primary: {
-					DEFAULT: '#14b8a6', // teal-500
-					hover: '#0d9488', // teal-600
-					light: '#2dd4bf', // teal-400
+					DEFAULT: '#10b981', // emerald-500
+					hover: '#059669', // emerald-600
+					light: '#34d399', // emerald-400
 				}
 			},
 			fontFamily: {
