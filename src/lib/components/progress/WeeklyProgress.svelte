@@ -27,7 +27,7 @@
 		return completionDates.includes(dateStr);
 	}
 
-	$: goalMet = completedDays >= 5;
+	let goalMet = $derived(completedDays >= 5);
 </script>
 
 <Card>

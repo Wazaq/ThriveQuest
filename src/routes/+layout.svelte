@@ -9,7 +9,7 @@
 	let { children, data } = $props();
 
 	// Determine if we're on an auth page (no header/footer needed)
-	$: isAuthPage = $page.url.pathname === '/login' || $page.url.pathname === '/signup';
+	let isAuthPage = $derived($page.url.pathname === '/login' || $page.url.pathname === '/signup');
 
 	async function handleLogout() {
 		await fetch('/api/auth/logout', { method: 'POST' });
