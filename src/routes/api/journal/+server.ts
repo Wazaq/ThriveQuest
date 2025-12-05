@@ -77,7 +77,9 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 			.values({
 				userId: locals.user.id,
 				date,
-				content
+				content,
+				createdAt: new Date(),
+				updatedAt: new Date()
 			})
 			.run();
 	}

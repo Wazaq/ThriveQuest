@@ -1,7 +1,7 @@
 // src/routes/+page.server.ts
 import { redirect } from '@sveltejs/kit';
 import { getDB, schema } from '$lib/db';
-import { eq, and, gte } from 'drizzle-orm';
+import { eq, and, gte, lt } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, platform, url }) => {
@@ -37,6 +37,8 @@ export const load: PageServerLoad = async ({ locals, platform, url }) => {
     // Fetch today's completions for quest buttons
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
     const completions = await db
         .select()
@@ -44,7 +46,8 @@ export const load: PageServerLoad = async ({ locals, platform, url }) => {
         .where(
             and(
                 eq(schema.questCompletions.userId, locals.user.id),
-                gte(schema.questCompletions.date, today)
+                gte(schema.questCompletions.date, today),
+                lt(schema.questCompletions.date, tomorrow)
             )
         )
         .all();

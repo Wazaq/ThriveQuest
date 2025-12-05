@@ -60,16 +60,17 @@
 			const response = await fetch(`/api/journal?date=${yesterdayDate}`);
 			const data = await response.json();
 
-			if (!data.content) {
-				// Not in DB yet, save it
+			// Sync if DB is empty OR if localStorage is different from DB
+			if (!data.content || data.content !== yesterdayContent) {
+				// Save/update in DB
 				await fetch('/api/journal', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({ date: yesterdayDate, content: yesterdayContent })
 				});
-				// Clean up localStorage
-				localStorage.removeItem(yesterdayKey);
 			}
+			// Always clean up localStorage after syncing
+			localStorage.removeItem(yesterdayKey);
 		}
 	}
 
