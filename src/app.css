@@ -1,3 +1,8 @@
 @import 'tailwindcss';
 
-/* Force rebuild - emerald green theme */
+/* Emerald green theme - Tailwind v4 style */
+@theme {
+	--color-primary: #10b981;
+	--color-primary-hover: #059669;
+	--color-primary-light: #34d399;
+}
