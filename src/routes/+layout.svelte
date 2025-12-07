@@ -6,6 +6,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import PWAInstallPrompt from '$lib/components/PWAInstallPrompt.svelte';
+	import DevBadge from '$lib/components/DevBadge.svelte';
 
 	let { children, data } = $props();
 
@@ -35,6 +36,7 @@
 					<a href="/" class="flex items-center gap-2">
 						<span class="text-2xl">🌱</span>
 						<span class="font-bold text-xl text-primary">ThriveQuest</span>
+						<DevBadge />
 					</a>
 
 					<!-- Navigation -->

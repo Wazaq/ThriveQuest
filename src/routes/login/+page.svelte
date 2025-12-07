@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import Button from '$lib/components/ui/Button.svelte';
 	import Card from '$lib/components/ui/Card.svelte';
+	import DevBadge from '$lib/components/DevBadge.svelte';
 
 	let email = '';
 	let password = '';
@@ -34,11 +35,14 @@
 		<!-- Logo/Header -->
 		<div class="text-center space-y-2">
 			<div class="text-5xl mb-4">🌱</div>
-			<h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
-				Welcome to ThriveQuest
-			</h1>
+			<div class="flex items-center justify-center gap-2 mb-2">
+				<h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
+					Welcome to ThriveQuest
+				</h1>
+				<DevBadge />
+			</div>
 			<p class="text-gray-600 dark:text-gray-400">
-				[DEV BRANCH TEST] Sign in to continue your wellness journey
+				Sign in to continue your wellness journey
 			</p>
 		</div>
 
