@@ -38,7 +38,7 @@
 				Welcome to ThriveQuest
 			</h1>
 			<p class="text-gray-600 dark:text-gray-400">
-				Sign in to continue your wellness journey
+				[DEV BRANCH TEST] Sign in to continue your wellness journey
 			</p>
 		</div>
 
