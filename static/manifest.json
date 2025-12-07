@@ -1,0 +1,20 @@
+{
+  "name": "ThriveQuest",
+  "short_name": "ThriveQuest",
+  "description": "Your daily wellness companion - Complete quests, track progress, and reflect on your journey",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#10b981",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "lifestyle", "productivity"],
+  "screenshots": []
+}

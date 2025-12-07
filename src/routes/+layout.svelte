@@ -5,6 +5,7 @@
 	import { themeStore } from '$lib/stores/theme.svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import PWAInstallPrompt from '$lib/components/PWAInstallPrompt.svelte';
 
 	let { children, data } = $props();
 
@@ -93,5 +94,8 @@
 				</div>
 			</div>
 		</footer>
+
+		<!-- PWA Install Prompt (only for authenticated users) -->
+		<PWAInstallPrompt />
 	{/if}
 </div>
