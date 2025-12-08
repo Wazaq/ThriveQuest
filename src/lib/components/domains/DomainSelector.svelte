@@ -8,7 +8,12 @@
 		incompleteQuestCounts?: Record<string, number>;
 	}
 
-	let { selectedDomain, onDomainChange, totalQuestCounts = {}, incompleteQuestCounts = {} }: Props = $props();
+	let {
+		selectedDomain,
+		onDomainChange,
+		totalQuestCounts = {},
+		incompleteQuestCounts = {}
+	}: Props = $props();
 
 	const domains = [
 		{ id: 'Positive Emotion', letter: 'P', color: 'positive', label: 'Positive Emotion' },
@@ -35,7 +40,7 @@
 	}
 </script>
 
-<div class="flex gap-2 mb-4">
+<div class="mb-4 flex gap-2">
 	{#each domains as domain}
 		{@const isSelected = selectedDomain === domain.id}
 		{@const totalQuests = totalQuestCounts[domain.id] || 0}
@@ -45,33 +50,38 @@
 		<button
 			onclick={() => selectDomain(domain.id)}
 			disabled={!hasQuests}
-			class="relative flex-1 h-16 rounded-t-lg transition-all duration-300 {colorMap[domain.color]}
+			class="relative h-16 flex-1 rounded-t-lg transition-all duration-300 {colorMap[domain.color]}
 				{isSelected
-					? 'opacity-100'
-					: hasQuests
-						? 'opacity-40 hover:opacity-60'
-						: 'opacity-20 cursor-not-allowed'
-				}
+				? 'opacity-100'
+				: hasQuests
+					? 'opacity-40 hover:opacity-60'
+					: 'cursor-not-allowed opacity-20'}
 				{!isSelected && hasQuests ? 'border-b-4 border-gray-900 dark:border-gray-950' : ''}
 			"
 			aria-label="{domain.label} domain"
 		>
 			<!-- Letter badge or lock icon -->
-			<div class="flex items-center justify-center h-full">
+			<div class="flex h-full items-center justify-center">
 				{#if hasQuests}
 					<span class="text-2xl font-bold text-white drop-shadow-md">
 						{domain.letter}
 					</span>
 				{:else}
-					<svg class="w-6 h-6 text-white/60" fill="currentColor" viewBox="0 0 20 20">
-						<path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+					<svg class="h-6 w-6 text-white/60" fill="currentColor" viewBox="0 0 20 20">
+						<path
+							fill-rule="evenodd"
+							d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+							clip-rule="evenodd"
+						/>
 					</svg>
 				{/if}
 			</div>
 
 			<!-- Quest count badge (show incomplete count) -->
 			{#if hasQuests && incompleteQuests > 0}
-				<div class="absolute top-1 right-1 bg-gray-900 dark:bg-gray-950 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+				<div
+					class="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gray-900 text-xs font-bold text-white dark:bg-gray-950"
+				>
 					{incompleteQuests}
 				</div>
 			{/if}

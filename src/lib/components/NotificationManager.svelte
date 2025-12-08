@@ -3,7 +3,8 @@
 	import { browser } from '$app/environment';
 
 	// VAPID public key - this is safe to expose in frontend
-	const VAPID_PUBLIC_KEY = 'BIo04EZh--89kR4IWH4b4GfG-hVSy-j1w_yxakIAc7XQuOzyQkgSgCcDWnSJlLasvcP6VIVsDA8HORn8Ysvtqbs';
+	const VAPID_PUBLIC_KEY =
+		'BIo04EZh--89kR4IWH4b4GfG-hVSy-j1w_yxakIAc7XQuOzyQkgSgCcDWnSJlLasvcP6VIVsDA8HORn8Ysvtqbs';
 
 	let permissionStatus = $state<'loading' | 'default' | 'granted' | 'denied'>('loading');
 	let isSubscribed = $state(false);
@@ -106,13 +107,11 @@
 	}
 </script>
 
-<div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-	<div class="flex items-start gap-3 mb-4">
+<div class="rounded-lg border border-gray-200 bg-white p-6 dark:border-gray-700 dark:bg-gray-800">
+	<div class="mb-4 flex items-start gap-3">
 		<div class="text-2xl">🔔</div>
 		<div class="flex-1">
-			<h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1">
-				Push Notifications
-			</h3>
+			<h3 class="mb-1 font-semibold text-gray-900 dark:text-gray-100">Push Notifications</h3>
 			<p class="text-sm text-gray-600 dark:text-gray-400">
 				Get reminded to complete your daily quests
 			</p>
@@ -120,7 +119,9 @@
 	</div>
 
 	{#if errorMessage}
-		<div class="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+		<div
+			class="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-800 dark:bg-red-900/20"
+		>
 			<p class="text-sm text-red-800 dark:text-red-200">{errorMessage}</p>
 		</div>
 	{/if}
@@ -136,13 +137,15 @@
 	{:else if permissionStatus === 'granted' && isSubscribed}
 		<div class="space-y-3">
 			<div class="flex items-center gap-2">
-				<div class="w-2 h-2 bg-green-500 rounded-full"></div>
-				<p class="text-sm text-gray-700 dark:text-gray-300 font-medium">Notifications are enabled</p>
+				<div class="h-2 w-2 rounded-full bg-green-500"></div>
+				<p class="text-sm font-medium text-gray-700 dark:text-gray-300">
+					Notifications are enabled
+				</p>
 			</div>
 			<button
 				onclick={unsubscribe}
 				disabled={isProcessing}
-				class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors border border-gray-300 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+				class="rounded-lg border border-gray-300 px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
 			>
 				{isProcessing ? 'Processing...' : 'Disable Notifications'}
 			</button>
@@ -151,13 +154,15 @@
 		<button
 			onclick={subscribe}
 			disabled={isProcessing}
-			class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+			class="bg-primary hover:bg-primary/90 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors disabled:cursor-not-allowed disabled:opacity-50"
 		>
 			{isProcessing ? 'Processing...' : 'Enable Notifications'}
 		</button>
 	{/if}
 
-	<div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+	<div
+		class="mt-4 rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20"
+	>
 		<p class="text-xs text-blue-800 dark:text-blue-200">
 			<strong>iOS users:</strong> You must "Add to Home Screen" first before enabling notifications.
 		</p>

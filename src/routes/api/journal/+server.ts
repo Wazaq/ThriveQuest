@@ -20,10 +20,7 @@ export const GET: RequestHandler = async ({ locals, platform, url }) => {
 		.select()
 		.from(schema.journalEntries)
 		.where(
-			and(
-				eq(schema.journalEntries.userId, locals.user.id),
-				eq(schema.journalEntries.date, date)
-			)
+			and(eq(schema.journalEntries.userId, locals.user.id), eq(schema.journalEntries.date, date))
 		)
 		.get();
 
@@ -53,10 +50,7 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 		.select()
 		.from(schema.journalEntries)
 		.where(
-			and(
-				eq(schema.journalEntries.userId, locals.user.id),
-				eq(schema.journalEntries.date, date)
-			)
+			and(eq(schema.journalEntries.userId, locals.user.id), eq(schema.journalEntries.date, date))
 		)
 		.get();
 

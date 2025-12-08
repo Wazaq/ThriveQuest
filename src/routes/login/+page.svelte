@@ -16,7 +16,7 @@
 		const response = await fetch('/api/auth/login', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ email, password }),
+			body: JSON.stringify({ email, password })
 		});
 
 		loading = false;
@@ -30,27 +30,26 @@
 	}
 </script>
 
-<div class="min-h-screen flex items-center justify-center px-4">
+<div class="flex min-h-screen items-center justify-center px-4">
 	<div class="w-full max-w-md space-y-6">
 		<!-- Logo/Header -->
-		<div class="text-center space-y-2">
-			<div class="text-5xl mb-4">🌱</div>
-			<div class="flex items-center justify-center gap-2 mb-2">
-				<h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
-					Welcome to ThriveQuest
-				</h1>
+		<div class="space-y-2 text-center">
+			<div class="mb-4 text-5xl">🌱</div>
+			<div class="mb-2 flex items-center justify-center gap-2">
+				<h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">Welcome to ThriveQuest</h1>
 				<DevBadge />
 			</div>
-			<p class="text-gray-600 dark:text-gray-400">
-				Sign in to continue your wellness journey
-			</p>
+			<p class="text-gray-600 dark:text-gray-400">Sign in to continue your wellness journey</p>
 		</div>
 
 		<!-- Login Form -->
 		<Card>
 			<form on:submit|preventDefault={handleSubmit} class="space-y-4">
 				<div>
-					<label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+					<label
+						for="email"
+						class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+					>
 						Email
 					</label>
 					<input
@@ -59,12 +58,15 @@
 						bind:value={email}
 						placeholder="you@example.com"
 						required
-						class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+						class="focus:ring-primary w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder-gray-400 transition-colors focus:border-transparent focus:ring-2 focus:outline-none dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:placeholder-gray-500"
 					/>
 				</div>
 
 				<div>
-					<label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+					<label
+						for="password"
+						class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+					>
 						Password
 					</label>
 					<input
@@ -73,12 +75,14 @@
 						bind:value={password}
 						placeholder="••••••••"
 						required
-						class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+						class="focus:ring-primary w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder-gray-400 transition-colors focus:border-transparent focus:ring-2 focus:outline-none dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:placeholder-gray-500"
 					/>
 				</div>
 
 				{#if error}
-					<div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+					<div
+						class="rounded-lg border border-red-200 bg-red-50 p-3 dark:border-red-800 dark:bg-red-900/20"
+					>
 						<p class="text-sm text-red-600 dark:text-red-400">
 							{error}
 						</p>
@@ -97,7 +101,10 @@
 		<div class="text-center">
 			<p class="text-gray-600 dark:text-gray-400">
 				Don't have an account?
-				<a href="/signup" class="text-primary hover:text-primary-hover font-medium transition-colors">
+				<a
+					href="/signup"
+					class="text-primary hover:text-primary-hover font-medium transition-colors"
+				>
 					Sign up
 				</a>
 			</p>

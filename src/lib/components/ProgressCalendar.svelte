@@ -36,8 +36,20 @@
 	}
 
 	// Month names
-	const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-		'July', 'August', 'September', 'October', 'November', 'December'];
+	const monthNames = [
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December'
+	];
 
 	const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 </script>
@@ -45,13 +57,14 @@
 <Card>
 	<div class="space-y-4">
 		<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-			{monthNames[currentMonth]} {currentYear}
+			{monthNames[currentMonth]}
+			{currentYear}
 		</h2>
 
 		<div class="grid grid-cols-7 gap-2">
 			<!-- Day headers -->
 			{#each dayHeaders as dayName}
-				<div class="text-center text-xs font-medium text-gray-600 dark:text-gray-400 py-2">
+				<div class="py-2 text-center text-xs font-medium text-gray-600 dark:text-gray-400">
 					{dayName}
 				</div>
 			{/each}
@@ -64,13 +77,12 @@
 			<!-- Actual days -->
 			{#each days as day}
 				<div
-					class="aspect-square flex items-center justify-center rounded-lg text-sm font-medium transition-all
+					class="flex aspect-square items-center justify-center rounded-lg text-sm font-medium transition-all
 						{isCompleted(day)
-							? 'bg-primary text-white shadow-md font-bold'
-							: isToday(day)
-								? 'bg-primary/20 dark:bg-primary/30 text-gray-900 dark:text-gray-100 ring-2 ring-primary font-bold'
-								: 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
-						}"
+						? 'bg-primary font-bold text-white shadow-md'
+						: isToday(day)
+							? 'bg-primary/20 dark:bg-primary/30 ring-primary font-bold text-gray-900 ring-2 dark:text-gray-100'
+							: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'}"
 				>
 					{day}
 				</div>
@@ -79,11 +91,11 @@
 
 		<div class="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-400">
 			<div class="flex items-center gap-2">
-				<div class="w-4 h-4 rounded bg-primary"></div>
+				<div class="bg-primary h-4 w-4 rounded"></div>
 				<span>Completed</span>
 			</div>
 			<div class="flex items-center gap-2">
-				<div class="w-4 h-4 rounded bg-gray-200 dark:bg-gray-700 ring-2 ring-primary"></div>
+				<div class="ring-primary h-4 w-4 rounded bg-gray-200 ring-2 dark:bg-gray-700"></div>
 				<span>Today</span>
 			</div>
 		</div>

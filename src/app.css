@@ -7,9 +7,9 @@
 	--color-primary-light: #34d399;
 
 	/* PERMA Domain Colors */
-	--color-positive: #fbbf24;      /* amber-400 - Positive Emotion */
-	--color-engagement: #3b82f6;    /* blue-500 - Engagement */
+	--color-positive: #fbbf24; /* amber-400 - Positive Emotion */
+	--color-engagement: #3b82f6; /* blue-500 - Engagement */
 	--color-relationships: #ec4899; /* pink-500 - Relationships */
-	--color-meaning: #8b5cf6;       /* violet-500 - Meaning */
+	--color-meaning: #8b5cf6; /* violet-500 - Meaning */
 	--color-accomplishment: #10b981; /* emerald-500 - Accomplishment */
 }

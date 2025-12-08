@@ -5,82 +5,96 @@ import { eq, and, gte, lt } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, platform, url }) => {
-    if (!locals.user) {
-        throw redirect(303, '/login');
-    }
+	if (!locals.user) {
+		throw redirect(303, '/login');
+	}
 
-    const db = getDB(platform!.env.DB);
+	const db = getDB(platform!.env.DB);
 
-    // Get selected domain from query param or default to Accomplishment
-    const selectedDomain = url.searchParams.get('domain') || 'Accomplishment';
+	// Check if user has completed onboarding
+	const user = await db
+		.select()
+		.from(schema.users)
+		.where(eq(schema.users.id, locals.user.id))
+		.get();
 
-    // Fetch quests for selected domain
-    const quests = await db
-        .select()
-        .from(schema.quests)
-        .where(eq(schema.quests.domain, selectedDomain))
-        .all();
+	if (!user?.onboardingComplete) {
+		throw redirect(303, '/onboarding');
+	}
 
-    // Fetch ALL completions for calendar
-    const allCompletions = await db
-        .select({ date: schema.questCompletions.date })
-        .from(schema.questCompletions)
-        .where(eq(schema.questCompletions.userId, locals.user.id))
-        .all();
+	// Get selected domain from query param or default to user's focus domain or Accomplishment
+	const selectedDomain = url.searchParams.get('domain') || user.focusDomain || 'Accomplishment';
 
-    // Pass dates as strings to avoid serialization issues
-    const completionDates = allCompletions.map(c => {
-        const date = c.date instanceof Date ? c.date : new Date(c.date);
-        return date.toISOString().split('T')[0];
-    });
+	// Fetch quests for selected domain
+	const quests = await db
+		.select()
+		.from(schema.quests)
+		.where(eq(schema.quests.domain, selectedDomain))
+		.all();
 
-    // Fetch today's completions for quest buttons
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+	// Fetch ALL completions for calendar
+	const allCompletions = await db
+		.select({ date: schema.questCompletions.date })
+		.from(schema.questCompletions)
+		.where(eq(schema.questCompletions.userId, locals.user.id))
+		.all();
 
-    const completions = await db
-        .select()
-        .from(schema.questCompletions)
-        .where(
-            and(
-                eq(schema.questCompletions.userId, locals.user.id),
-                gte(schema.questCompletions.date, today),
-                lt(schema.questCompletions.date, tomorrow)
-            )
-        )
-        .all();
+	// Pass dates as strings to avoid serialization issues
+	const completionDates = allCompletions.map((c) => {
+		const date = c.date instanceof Date ? c.date : new Date(c.date);
+		return date.toISOString().split('T')[0];
+	});
 
-    // Get quest counts per domain
-    const allQuests = await db
-        .select()
-        .from(schema.quests)
-        .all();
+	// Fetch today's completions for quest buttons
+	const today = new Date();
+	today.setHours(0, 0, 0, 0);
+	const tomorrow = new Date(today);
+	tomorrow.setDate(tomorrow.getDate() + 1);
 
-    // Get completed quest IDs for today
-    const completedQuestIds = new Set(completions.map(c => c.questId));
+	const completions = await db
+		.select()
+		.from(schema.questCompletions)
+		.where(
+			and(
+				eq(schema.questCompletions.userId, locals.user.id),
+				gte(schema.questCompletions.date, today),
+				lt(schema.questCompletions.date, tomorrow)
+			)
+		)
+		.all();
 
-    // Count total quests per domain (for tab availability)
-    const totalQuestCounts = allQuests.reduce((acc, quest) => {
-        acc[quest.domain] = (acc[quest.domain] || 0) + 1;
-        return acc;
-    }, {} as Record<string, number>);
+	// Get quest counts per domain
+	const allQuests = await db.select().from(schema.quests).all();
 
-    // Count only incomplete quests per domain (for badges)
-    const incompleteQuestCounts = allQuests.reduce((acc, quest) => {
-        if (!completedQuestIds.has(quest.id)) {
-            acc[quest.domain] = (acc[quest.domain] || 0) + 1;
-        }
-        return acc;
-    }, {} as Record<string, number>);
+	// Get completed quest IDs for today
+	const completedQuestIds = new Set(completions.map((c) => c.questId));
 
-    return {
-        quests,
-        completions,
-        completionDates: [...new Set(completionDates)],
-        selectedDomain,
-        totalQuestCounts,
-        incompleteQuestCounts
-    };
+	// Count total quests per domain (for tab availability)
+	const totalQuestCounts = allQuests.reduce(
+		(acc, quest) => {
+			acc[quest.domain] = (acc[quest.domain] || 0) + 1;
+			return acc;
+		},
+		{} as Record<string, number>
+	);
+
+	// Count only incomplete quests per domain (for badges)
+	const incompleteQuestCounts = allQuests.reduce(
+		(acc, quest) => {
+			if (!completedQuestIds.has(quest.id)) {
+				acc[quest.domain] = (acc[quest.domain] || 0) + 1;
+			}
+			return acc;
+		},
+		{} as Record<string, number>
+	);
+
+	return {
+		quests,
+		completions,
+		completionDates: [...new Set(completionDates)],
+		selectedDomain,
+		totalQuestCounts,
+		incompleteQuestCounts
+	};
 };

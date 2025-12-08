@@ -11,7 +11,7 @@ export default {
 				primary: {
 					DEFAULT: '#10b981', // emerald-500
 					hover: '#059669', // emerald-600
-					light: '#34d399', // emerald-400
+					light: '#34d399' // emerald-400
 				}
 			},
 			fontFamily: {

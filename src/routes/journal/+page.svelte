@@ -113,22 +113,25 @@
 	}
 </script>
 
-<div class="space-y-6 max-w-4xl">
+<div class="max-w-4xl space-y-6">
 	<div class="flex items-center justify-between">
 		<div>
-			<h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-				My Journal
-			</h1>
+			<h1 class="mb-2 text-3xl font-bold text-gray-900 dark:text-gray-100">My Journal</h1>
 			<p class="text-gray-600 dark:text-gray-400">
 				{todayFormatted}
 			</p>
 		</div>
 		<a
 			href="/journal/history"
-			class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary transition-colors border border-gray-300 dark:border-gray-600 rounded-lg hover:border-primary"
+			class="hover:text-primary hover:border-primary flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors dark:border-gray-600 dark:text-gray-300"
 		>
-			<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+			<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+				/>
 			</svg>
 			View History
 		</a>
@@ -136,39 +139,53 @@
 
 	<Card>
 		<div class="space-y-4">
-			<div class="flex items-center justify-between flex-wrap gap-3">
+			<div class="flex flex-wrap items-center justify-between gap-3">
 				<div class="flex items-center gap-2">
 					<h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
 						Today's Reflections
 					</h2>
 					<button
-						onclick={() => showPrompts = !showPrompts}
-						class="p-1.5 text-gray-500 dark:text-gray-400 hover:text-primary transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+						onclick={() => (showPrompts = !showPrompts)}
+						class="hover:text-primary rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
 						aria-label="Show journal prompts"
 					>
-						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-							<path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
+						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+							<path
+								d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"
+							/>
 						</svg>
 					</button>
 				</div>
 				<div class="flex items-center gap-3">
 					{#if cloudSynced}
-						<span class="flex items-center gap-1 text-xs text-primary">
-							<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-								<path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+						<span class="text-primary flex items-center gap-1 text-xs">
+							<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+								<path
+									d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"
+								/>
 								<path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
 							</svg>
 							Synced to cloud
 						</span>
 					{:else}
 						<span class="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
-							<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+							<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+								/>
 							</svg>
 							Saved locally
 						</span>
 					{/if}
-					<Button variant="primary" size="sm" onclick={saveToCloud} disabled={saving || cloudSynced}>
+					<Button
+						variant="primary"
+						size="sm"
+						onclick={saveToCloud}
+						disabled={saving || cloudSynced}
+					>
 						{saving ? 'Saving...' : 'Save to Cloud'}
 					</Button>
 				</div>
@@ -179,12 +196,17 @@
 				oninput={saveToLocalStorage}
 				placeholder="What's on your mind today? Reflect on your progress, thoughts, feelings, or anything else you'd like to remember..."
 				rows="15"
-				class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors resize-y"
+				class="focus:ring-primary w-full resize-y rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 placeholder-gray-400 transition-colors focus:border-transparent focus:ring-2 focus:outline-none dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:placeholder-gray-500"
 			></textarea>
 
 			<div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+				<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+					/>
 				</svg>
 				<span>Entries save locally as you type. Click "Save to Cloud" to sync across devices.</span>
 			</div>
@@ -194,27 +216,36 @@
 	<!-- Prompts Overlay -->
 	{#if showPrompts}
 		<div
-			class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-			onclick={() => showPrompts = false}
+			class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+			onclick={() => (showPrompts = false)}
 		>
 			<div
-				class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6"
+				class="w-full max-w-md rounded-lg bg-white p-6 shadow-xl dark:bg-gray-800"
 				onclick={(e) => e.stopPropagation()}
 			>
-				<div class="flex items-center justify-between mb-4">
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-						<svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
-							<path d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
+				<div class="mb-4 flex items-center justify-between">
+					<h3
+						class="flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-gray-100"
+					>
+						<svg class="text-primary h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+							<path
+								d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z"
+							/>
 						</svg>
 						Journaling Prompts
 					</h3>
 					<button
-						onclick={() => showPrompts = false}
-						class="p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+						onclick={() => (showPrompts = false)}
+						class="p-1 text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
 						aria-label="Close prompts"
 					>
-						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+						<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M6 18L18 6M6 6l12 12"
+							/>
 						</svg>
 					</button>
 				</div>

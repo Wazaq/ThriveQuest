@@ -13,6 +13,10 @@
 	};
 </script>
 
-<div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 {paddingClasses[padding]}">
+<div
+	class="rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800 {paddingClasses[
+		padding
+	]}"
+>
 	{@render children?.()}
 </div>

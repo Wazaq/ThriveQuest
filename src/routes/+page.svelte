@@ -69,19 +69,17 @@
 	// Map domain to color key
 	const domainColorMap: Record<string, string> = {
 		'Positive Emotion': 'positive',
-		'Engagement': 'engagement',
-		'Relationships': 'relationships',
-		'Meaning': 'meaning',
-		'Accomplishment': 'accomplishment'
+		Engagement: 'engagement',
+		Relationships: 'relationships',
+		Meaning: 'meaning',
+		Accomplishment: 'accomplishment'
 	};
 </script>
 
 <div class="space-y-6">
 	<!-- Header -->
 	<div>
-		<h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-			Welcome back! 🌱
-		</h1>
+		<h1 class="mb-2 text-3xl font-bold text-gray-900 dark:text-gray-100">Welcome back! 🌱</h1>
 		<p class="text-gray-600 dark:text-gray-400">
 			Keep building your daily wellness habits. You're doing great!
 		</p>
@@ -90,7 +88,7 @@
 	<!-- Weekly Progress -->
 	<WeeklyProgress
 		completedDays={completedThisWeek}
-		currentDayOfWeek={currentDayOfWeek}
+		{currentDayOfWeek}
 		completionDates={data.completionDates}
 	/>
 
