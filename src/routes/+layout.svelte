@@ -43,6 +43,7 @@
 					<nav class="hidden md:flex items-center gap-6">
 						<a href="/" class="text-gray-900 dark:text-gray-100 hover:text-primary font-medium transition-colors">Dashboard</a>
 						<a href="/journal" class="text-gray-900 dark:text-gray-100 hover:text-primary font-medium transition-colors">Journal</a>
+						<a href="/settings" class="text-gray-900 dark:text-gray-100 hover:text-primary font-medium transition-colors">Settings</a>
 						<a href="/about" class="text-gray-900 dark:text-gray-100 hover:text-primary font-medium transition-colors">About</a>
 					</nav>
 
@@ -65,6 +66,7 @@
 				<nav class="md:hidden flex gap-4 pb-3 overflow-x-auto">
 					<a href="/" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary transition-colors whitespace-nowrap">Dashboard</a>
 					<a href="/journal" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary transition-colors whitespace-nowrap">Journal</a>
+					<a href="/settings" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary transition-colors whitespace-nowrap">Settings</a>
 					<a href="/about" class="text-sm text-gray-700 dark:text-gray-300 hover:text-primary transition-colors whitespace-nowrap">About</a>
 				</nav>
 			</div>

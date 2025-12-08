@@ -31,3 +31,10 @@ export const journalEntries = sqliteTable('journal_entries', {
   createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(unixepoch())`)
 });
+
+export const pushSubscriptions = sqliteTable('push_subscriptions', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: integer('user_id').notNull().references(() => users.id),
+  subscriptionJson: text('subscription_json').notNull().unique(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(unixepoch())`)
+});
