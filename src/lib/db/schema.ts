@@ -50,3 +50,15 @@ export const pushSubscriptions = sqliteTable('push_subscriptions', {
 	subscriptionJson: text('subscription_json').notNull().unique(),
 	createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(unixepoch())`)
 });
+
+export const dailyQuests = sqliteTable('daily_quests', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	userId: integer('user_id')
+		.notNull()
+		.references(() => users.id),
+	questId: integer('quest_id')
+		.notNull()
+		.references(() => quests.id),
+	date: text('date').notNull(), // Store as 'YYYY-MM-DD'
+	createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(unixepoch())`)
+});

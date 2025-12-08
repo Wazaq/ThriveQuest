@@ -1,10 +1,10 @@
 // src/routes/+page.server.ts
 import { redirect } from '@sveltejs/kit';
 import { getDB, schema } from '$lib/db';
-import { eq, and, gte, lt } from 'drizzle-orm';
+import { eq, and, gte, lt, inArray } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals, platform, url }) => {
+export const load: PageServerLoad = async ({ locals, platform }) => {
 	if (!locals.user) {
 		throw redirect(303, '/login');
 	}
@@ -22,15 +22,20 @@ export const load: PageServerLoad = async ({ locals, platform, url }) => {
 		throw redirect(303, '/onboarding');
 	}
 
-	// Get selected domain from query param or default to user's focus domain or Accomplishment
-	const selectedDomain = url.searchParams.get('domain') || user.focusDomain || 'Accomplishment';
+	// Get today's 5 daily quests
+	const { getDailyQuests } = await import('$lib/dailyQuests');
+	const dailyQuestIds = await getDailyQuests(db, locals.user.id, user.focusDomain);
 
-	// Fetch quests for selected domain
+	// Fetch the actual quest details
 	const quests = await db
 		.select()
 		.from(schema.quests)
-		.where(eq(schema.quests.domain, selectedDomain))
+		.where(inArray(schema.quests.id, dailyQuestIds))
 		.all();
+
+	// Sort quests to match the order from dailyQuestIds (focus domain first)
+	const questsMap = new Map(quests.map((q) => [q.id, q]));
+	const sortedQuests = dailyQuestIds.map((id) => questsMap.get(id)!).filter(Boolean);
 
 	// Fetch ALL completions for calendar
 	const allCompletions = await db
@@ -63,38 +68,9 @@ export const load: PageServerLoad = async ({ locals, platform, url }) => {
 		)
 		.all();
 
-	// Get quest counts per domain
-	const allQuests = await db.select().from(schema.quests).all();
-
-	// Get completed quest IDs for today
-	const completedQuestIds = new Set(completions.map((c) => c.questId));
-
-	// Count total quests per domain (for tab availability)
-	const totalQuestCounts = allQuests.reduce(
-		(acc, quest) => {
-			acc[quest.domain] = (acc[quest.domain] || 0) + 1;
-			return acc;
-		},
-		{} as Record<string, number>
-	);
-
-	// Count only incomplete quests per domain (for badges)
-	const incompleteQuestCounts = allQuests.reduce(
-		(acc, quest) => {
-			if (!completedQuestIds.has(quest.id)) {
-				acc[quest.domain] = (acc[quest.domain] || 0) + 1;
-			}
-			return acc;
-		},
-		{} as Record<string, number>
-	);
-
 	return {
-		quests,
+		quests: sortedQuests,
 		completions,
-		completionDates: [...new Set(completionDates)],
-		selectedDomain,
-		totalQuestCounts,
-		incompleteQuestCounts
+		completionDates: [...new Set(completionDates)]
 	};
 };

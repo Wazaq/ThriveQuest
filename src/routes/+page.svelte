@@ -1,25 +1,9 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
 	import ProgressCalendar from '$lib/components/ProgressCalendar.svelte';
 	import WeeklyProgress from '$lib/components/progress/WeeklyProgress.svelte';
 	import QuestList from '$lib/components/quests/QuestList.svelte';
-	import DomainSelector from '$lib/components/domains/DomainSelector.svelte';
 
 	let { data } = $props();
-
-	// Initialize selected domain from data or localStorage
-	let selectedDomain = $state(data.selectedDomain);
-
-	$effect(() => {
-		// On mount, check localStorage for saved domain
-		if (browser) {
-			const saved = localStorage.getItem('selectedDomain');
-			if (saved && saved !== selectedDomain) {
-				goto(`/?domain=${encodeURIComponent(saved)}`, { replaceState: true });
-			}
-		}
-	});
 
 	// Calculate weekly progress (5 out of 7 principle)
 	function getWeeklyProgress(): number {
@@ -48,11 +32,6 @@
 	const completedThisWeek = getWeeklyProgress();
 	const currentDayOfWeek = new Date().getDay();
 
-	function handleDomainChange(domain: string) {
-		selectedDomain = domain;
-		goto(`/?domain=${encodeURIComponent(domain)}`, { replaceState: true, noScroll: true });
-	}
-
 	async function handleComplete(questId: number) {
 		const response = await fetch('/api/completions', {
 			method: 'POST',
@@ -65,15 +44,6 @@
 			window.location.reload();
 		}
 	}
-
-	// Map domain to color key
-	const domainColorMap: Record<string, string> = {
-		'Positive Emotion': 'positive',
-		Engagement: 'engagement',
-		Relationships: 'relationships',
-		Meaning: 'meaning',
-		Accomplishment: 'accomplishment'
-	};
 </script>
 
 <div class="space-y-6">
@@ -81,7 +51,7 @@
 	<div>
 		<h1 class="mb-2 text-3xl font-bold text-gray-900 dark:text-gray-100">Welcome back! 🌱</h1>
 		<p class="text-gray-600 dark:text-gray-400">
-			Keep building your daily wellness habits. You're doing great!
+			Your 5 daily quests are ready. Complete them to build your wellness journey!
 		</p>
 	</div>
 
@@ -92,21 +62,15 @@
 		completionDates={data.completionDates}
 	/>
 
-	<!-- Domain Selector & Quest List -->
+	<!-- Daily Quests -->
 	<div>
-		<DomainSelector
-			{selectedDomain}
-			onDomainChange={handleDomainChange}
-			totalQuestCounts={data.totalQuestCounts}
-			incompleteQuestCounts={data.incompleteQuestCounts}
-		/>
-		<QuestList
-			quests={data.quests}
-			completions={data.completions}
-			onComplete={handleComplete}
-			domainTitle={selectedDomain}
-			domainColor={domainColorMap[selectedDomain]}
-		/>
+		<div class="mb-4">
+			<h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Today's Quests</h2>
+			<p class="text-sm text-gray-600 dark:text-gray-400">
+				5 curated quests across all PERMA domains • Refreshes daily at midnight
+			</p>
+		</div>
+		<QuestList quests={data.quests} completions={data.completions} onComplete={handleComplete} />
 	</div>
 
 	<!-- Calendar -->
