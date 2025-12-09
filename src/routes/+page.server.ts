@@ -46,7 +46,8 @@ export const load: PageServerLoad = async ({ locals, platform }) => {
 
 	// Pass dates as strings to avoid serialization issues
 	const completionDates = allCompletions.map((c) => {
-		const date = c.date instanceof Date ? c.date : new Date(c.date);
+		// c.date is a Unix timestamp (seconds), need to convert to milliseconds
+		const date = c.date instanceof Date ? c.date : new Date(c.date * 1000);
 		return date.toISOString().split('T')[0];
 	});
 
