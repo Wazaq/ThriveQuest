@@ -6,6 +6,7 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import PWAInstallPrompt from '$lib/components/PWAInstallPrompt.svelte';
+	import ReloadPrompt from '$lib/components/ReloadPrompt.svelte';
 	import DevBadge from '$lib/components/DevBadge.svelte';
 
 	let { children, data } = $props();
@@ -153,4 +154,7 @@
 		<!-- PWA Install Prompt (only for authenticated users) -->
 		<PWAInstallPrompt />
 	{/if}
+
+	<!-- PWA Update Prompt (available for all users) -->
+	<ReloadPrompt />
 </div>
