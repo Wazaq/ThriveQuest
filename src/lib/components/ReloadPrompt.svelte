@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { useRegisterSW } from 'virtual:pwa-register/svelte';
 
+	let userClickedReload = false;
+
 	const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
 		onRegistered(r) {
 			console.log('Service Worker registered');
@@ -20,15 +22,18 @@
 	// When user clicks "Reload", tell the new SW to take control
 	const handleUpdate = () => {
 		if ($needRefresh) {
+			userClickedReload = true;
 			updateServiceWorker(true);
 		}
 	};
 
 	// The 'controllerchange' event fires when the new service worker has taken over.
-	// This is the moment to reload.
+	// Only reload if the user actually clicked "Reload" (not "Later")
 	if (typeof navigator !== 'undefined' && navigator.serviceWorker) {
 		navigator.serviceWorker.addEventListener('controllerchange', () => {
-			window.location.reload();
+			if (userClickedReload) {
+				window.location.reload();
+			}
 		});
 	}
 
