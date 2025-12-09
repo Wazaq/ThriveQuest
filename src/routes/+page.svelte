@@ -51,7 +51,7 @@
 	<div>
 		<h1 class="mb-2 text-3xl font-bold text-gray-900 dark:text-gray-100">Ready to thrive? 🌱</h1>
 		<p class="text-gray-600 dark:text-gray-400">
-			Your 5 daily quests are ready. Complete them to build your wellness journey!
+			5 daily quests to build your wellness journey. Let's go!
 		</p>
 	</div>
 
