@@ -22,8 +22,10 @@
 		needRefresh.set(false);
 	}
 
-	function reload() {
-		updateServiceWorker(true);
+	async function reload() {
+		await updateServiceWorker(true);
+		// Force hard reload
+		window.location.reload();
 	}
 </script>
 

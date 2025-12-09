@@ -31,6 +31,8 @@ export default defineConfig({
 				categories: ['health', 'lifestyle', 'productivity']
 			},
 			workbox: {
+				skipWaiting: true,
+				clientsClaim: true,
 				// Cache static assets
 				globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2}'],
 				// Runtime caching for API calls
