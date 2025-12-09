@@ -8,11 +8,10 @@ export async function POST({ request, locals, platform }: RequestEvent) {
 		return json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
-	const { questId } = await request.json();
+	const { questId, date } = await request.json();
 
-	// Get today's date in YYYY-MM-DD format (user's timezone)
-	const today = new Date();
-	const dateStr = today.toISOString().split('T')[0];
+	// Date should be sent from client in YYYY-MM-DD format (user's local timezone)
+	const dateStr = date;
 
 	const db = getDB(platform!.env.DB);
 

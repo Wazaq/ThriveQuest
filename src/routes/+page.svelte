@@ -33,10 +33,17 @@
 	const currentDayOfWeek = new Date().getDay();
 
 	async function handleComplete(questId: number) {
+		// Get today's date in user's local timezone (YYYY-MM-DD)
+		const today = new Date();
+		const year = today.getFullYear();
+		const month = String(today.getMonth() + 1).padStart(2, '0');
+		const day = String(today.getDate()).padStart(2, '0');
+		const date = `${year}-${month}-${day}`;
+
 		const response = await fetch('/api/completions', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ questId })
+			body: JSON.stringify({ questId, date })
 		});
 
 		if (response.ok) {
