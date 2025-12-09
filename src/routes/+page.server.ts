@@ -44,18 +44,12 @@ export const load: PageServerLoad = async ({ locals, platform }) => {
 		.where(eq(schema.questCompletions.userId, locals.user.id))
 		.all();
 
-	// Pass dates as strings to avoid serialization issues
-	const completionDates = allCompletions.map((c) => {
-		// c.date is a Unix timestamp (seconds), need to convert to milliseconds
-		const date = c.date instanceof Date ? c.date : new Date(c.date * 1000);
-		return date.toISOString().split('T')[0];
-	});
+	// Dates are already stored as YYYY-MM-DD strings
+	const completionDates = allCompletions.map((c) => c.date);
 
 	// Fetch today's completions for quest buttons
 	const today = new Date();
-	today.setHours(0, 0, 0, 0);
-	const tomorrow = new Date(today);
-	tomorrow.setDate(tomorrow.getDate() + 1);
+	const todayStr = today.toISOString().split('T')[0];
 
 	const completions = await db
 		.select()
@@ -63,8 +57,7 @@ export const load: PageServerLoad = async ({ locals, platform }) => {
 		.where(
 			and(
 				eq(schema.questCompletions.userId, locals.user.id),
-				gte(schema.questCompletions.date, today),
-				lt(schema.questCompletions.date, tomorrow)
+				eq(schema.questCompletions.date, todayStr)
 			)
 		)
 		.all();

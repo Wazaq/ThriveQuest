@@ -22,7 +22,7 @@ export const quests = sqliteTable('Quest', {
 
 export const questCompletions = sqliteTable('QuestCompletion', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
-	date: integer('date', { mode: 'timestamp' }).notNull(),
+	date: text('date').notNull(), // Store as 'YYYY-MM-DD'
 	userId: integer('userId')
 		.notNull()
 		.references(() => users.id),

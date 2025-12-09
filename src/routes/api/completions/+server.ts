@@ -9,8 +9,10 @@ export async function POST({ request, locals, platform }: RequestEvent) {
 	}
 
 	const { questId } = await request.json();
+
+	// Get today's date in YYYY-MM-DD format (user's timezone)
 	const today = new Date();
-	today.setHours(0, 0, 0, 0); // Normalize to start of day
+	const dateStr = today.toISOString().split('T')[0];
 
 	const db = getDB(platform!.env.DB);
 
@@ -19,7 +21,7 @@ export async function POST({ request, locals, platform }: RequestEvent) {
 		.values({
 			userId: locals.user.id,
 			questId: questId,
-			date: today
+			date: dateStr
 		})
 		.returning();
 
