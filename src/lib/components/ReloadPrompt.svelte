@@ -17,15 +17,22 @@
 		}
 	});
 
+	// When user clicks "Reload", tell the new SW to take control
+	const handleUpdate = () => {
+		if ($needRefresh) {
+			updateServiceWorker(true);
+		}
+	};
+
+	// The 'controllerchange' event fires when the new service worker has taken over.
+	// This is the moment to reload.
+	navigator.serviceWorker.addEventListener('controllerchange', () => {
+		window.location.reload();
+	});
+
 	function close() {
 		offlineReady.set(false);
 		needRefresh.set(false);
-	}
-
-	async function reload() {
-		await updateServiceWorker(true);
-		// Force hard reload
-		window.location.reload();
 	}
 </script>
 
@@ -39,7 +46,7 @@
 		</div>
 		<div class="flex gap-2">
 			<button
-				onclick={reload}
+				onclick={handleUpdate}
 				class="rounded-md bg-white px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-gray-100"
 			>
 				Reload
