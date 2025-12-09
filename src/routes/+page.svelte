@@ -49,7 +49,7 @@
 <div class="space-y-6">
 	<!-- Header -->
 	<div>
-		<h1 class="mb-2 text-3xl font-bold text-gray-900 dark:text-gray-100">Time to thrive! 💪</h1>
+		<h1 class="mb-2 text-3xl font-bold text-gray-900 dark:text-gray-100">Ready to thrive? 🌟</h1>
 		<p class="text-gray-600 dark:text-gray-400">
 			5 daily quests to build your wellness journey. Let's go!
 		</p>
