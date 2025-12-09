@@ -26,9 +26,11 @@
 
 	// The 'controllerchange' event fires when the new service worker has taken over.
 	// This is the moment to reload.
-	navigator.serviceWorker.addEventListener('controllerchange', () => {
-		window.location.reload();
-	});
+	if (typeof navigator !== 'undefined' && navigator.serviceWorker) {
+		navigator.serviceWorker.addEventListener('controllerchange', () => {
+			window.location.reload();
+		});
+	}
 
 	function close() {
 		offlineReady.set(false);
