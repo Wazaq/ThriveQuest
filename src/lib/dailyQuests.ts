@@ -4,12 +4,12 @@ import { eq, and, sql } from 'drizzle-orm';
 import * as schema from './db/schema';
 
 const PERMA_DOMAINS = [
-	'Positive Emotions',
+	'Positive Emotion',
 	'Engagement',
 	'Relationships',
 	'Meaning',
 	'Accomplishment'
-];
+];;
 
 /**
  * Get today's date in YYYY-MM-DD format

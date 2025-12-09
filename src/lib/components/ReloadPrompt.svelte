@@ -1,7 +1,25 @@
 <script lang="ts">
 	import { useRegisterSW } from 'virtual:pwa-register/svelte';
+	import { onMount } from 'svelte';
 
 	let userClickedReload = false;
+	let showBanner = $state(true);
+
+	// Check if user recently dismissed the update banner
+	onMount(() => {
+		if (typeof localStorage !== 'undefined') {
+			const dismissed = localStorage.getItem('pwa-update-dismissed');
+			if (dismissed) {
+				const dismissedTime = parseInt(dismissed);
+				const oneHourAgo = Date.now() - 60 * 60 * 1000;
+
+				// Hide banner if dismissed within the last hour
+				if (dismissedTime > oneHourAgo) {
+					showBanner = false;
+				}
+			}
+		}
+	});
 
 	const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
 		onRegistered(r) {
@@ -23,6 +41,12 @@
 	const handleUpdate = () => {
 		if ($needRefresh) {
 			userClickedReload = true;
+
+			// Clear dismissal flag since they're applying the update
+			if (typeof localStorage !== 'undefined') {
+				localStorage.removeItem('pwa-update-dismissed');
+			}
+
 			updateServiceWorker(true);
 		}
 	};
@@ -40,10 +64,15 @@
 	function close() {
 		offlineReady.set(false);
 		needRefresh.set(false);
+
+		// Store dismissal in localStorage to prevent showing again on navigation
+		if (typeof localStorage !== 'undefined') {
+			localStorage.setItem('pwa-update-dismissed', Date.now().toString());
+		}
 	}
 </script>
 
-{#if $needRefresh}
+{#if $needRefresh && showBanner}
 	<div
 		class="fixed bottom-4 left-4 right-4 z-50 flex items-center justify-between gap-3 rounded-lg bg-primary p-4 text-white shadow-lg sm:left-auto sm:right-4 sm:max-w-md"
 	>
