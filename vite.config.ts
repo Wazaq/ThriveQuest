@@ -9,6 +9,7 @@ export default defineConfig({
 		sveltekit(),
 		VitePWA({
 			registerType: 'prompt',
+			injectRegister: 'auto',
 			manifest: {
 				name: 'ThriveQuest',
 				short_name: 'ThriveQuest',

@@ -22,8 +22,8 @@
 		needRefresh.set(false);
 	}
 
-	async function reload() {
-		await updateServiceWorker(true);
+	function reload() {
+		updateServiceWorker(true);
 	}
 </script>
 
