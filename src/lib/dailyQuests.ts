@@ -9,7 +9,7 @@ const PERMA_DOMAINS = [
 	'Relationships',
 	'Meaning',
 	'Accomplishment'
-];;
+];
 
 /**
  * Get today's date in YYYY-MM-DD format
@@ -80,14 +80,16 @@ async function selectDailyQuests(
 
 /**
  * Get or generate daily quests for a user
- * Returns the 5 quest IDs for today
+ * Returns the 5 quest IDs for the specified date (or today if not provided)
+ * @param date - Optional date string in YYYY-MM-DD format. If not provided, uses server's current date (UTC)
  */
 export async function getDailyQuests(
 	db: DrizzleD1Database,
 	userId: number,
-	focusDomain: string | null
+	focusDomain: string | null,
+	date?: string
 ): Promise<number[]> {
-	const today = getTodayDate();
+	const today = date || getTodayDate();
 
 	// Check if we already have daily quests for today
 	const existingDailyQuests = await db

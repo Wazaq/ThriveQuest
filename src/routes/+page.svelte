@@ -1,9 +1,37 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 	import ProgressCalendar from '$lib/components/ProgressCalendar.svelte';
 	import WeeklyProgress from '$lib/components/progress/WeeklyProgress.svelte';
 	import QuestList from '$lib/components/quests/QuestList.svelte';
 
 	let { data } = $props();
+
+	// Use a local variable for quests that can be updated by onMount
+	let quests = $state(data.quests);
+
+	// On mount, ensure we have quests for the user's local date
+	onMount(async () => {
+		if (browser) {
+			// Get local date in YYYY-MM-DD format
+			const localDate = new Date();
+			const year = localDate.getFullYear();
+			const month = String(localDate.getMonth() + 1).padStart(2, '0');
+			const day = String(localDate.getDate()).padStart(2, '0');
+			const localDateString = `${year}-${month}-${day}`;
+
+			// Call the API to ensure quests exist for this local date
+			const response = await fetch('/api/daily-quests/ensure', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ date: localDateString })
+			});
+
+			if (response.ok) {
+				quests = await response.json();
+			}
+		}
+	});
 
 	// Calculate weekly progress (5 out of 7 principle)
 	function getWeeklyProgress(): number {
@@ -77,7 +105,7 @@
 				5 curated quests across all PERMA domains • Refreshes daily at midnight
 			</p>
 		</div>
-		<QuestList quests={data.quests} completions={data.completions} onComplete={handleComplete} />
+		<QuestList {quests} completions={data.completions} onComplete={handleComplete} />
 	</div>
 
 	<!-- Calendar -->

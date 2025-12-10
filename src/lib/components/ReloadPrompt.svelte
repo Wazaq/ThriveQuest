@@ -74,7 +74,7 @@
 
 {#if $needRefresh && showBanner}
 	<div
-		class="fixed bottom-4 left-4 right-4 z-50 flex items-center justify-between gap-3 rounded-lg bg-primary p-4 text-white shadow-lg sm:left-auto sm:right-4 sm:max-w-md"
+		class="bg-primary fixed right-4 bottom-4 left-4 z-50 flex items-center justify-between gap-3 rounded-lg p-4 text-white shadow-lg sm:right-4 sm:left-auto sm:max-w-md"
 	>
 		<div class="flex-1">
 			<p class="font-medium">New version available</p>
@@ -83,7 +83,7 @@
 		<div class="flex gap-2">
 			<button
 				onclick={handleUpdate}
-				class="rounded-md bg-white px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-gray-100"
+				class="text-primary rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100"
 			>
 				Reload
 			</button>
@@ -99,7 +99,7 @@
 
 {#if $offlineReady}
 	<div
-		class="fixed bottom-4 left-4 right-4 z-50 flex items-center justify-between gap-3 rounded-lg bg-gray-900 p-4 text-white shadow-lg sm:left-auto sm:right-4 sm:max-w-md"
+		class="fixed right-4 bottom-4 left-4 z-50 flex items-center justify-between gap-3 rounded-lg bg-gray-900 p-4 text-white shadow-lg sm:right-4 sm:left-auto sm:max-w-md"
 	>
 		<div class="flex-1">
 			<p class="font-medium">App ready for offline use</p>

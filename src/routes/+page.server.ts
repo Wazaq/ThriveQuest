@@ -22,7 +22,8 @@ export const load: PageServerLoad = async ({ locals, platform }) => {
 		throw redirect(303, '/onboarding');
 	}
 
-	// Get today's 5 daily quests
+	// Get today's 5 daily quests (server's UTC day for SSR)
+	// The client will call /api/daily-quests/ensure with local date on mount
 	const { getDailyQuests } = await import('$lib/dailyQuests');
 	const dailyQuestIds = await getDailyQuests(db, locals.user.id, user.focusDomain);
 
