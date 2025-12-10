@@ -1,59 +1,66 @@
 <script lang="ts">
 	import { useRegisterSW } from 'virtual:pwa-register/svelte';
-	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
-
-	// Check if we're on dev environment
-	let isDev =
-		browser &&
-		(window.location.hostname === 'dev.thrivequest.app' ||
-			window.location.hostname.includes('dev.'));
+	import { onMount, onDestroy } from 'svelte';
 
 	const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
 		onRegistered(r) {
 			if (!r) return;
-
-			// In production, check for updates when tab becomes visible
-			// In dev, don't auto-check (too many deployments cause confusion)
-			if (!isDev) {
-				document.addEventListener('visibilitychange', () => {
-					if (document.visibilityState === 'visible') {
-						r.update();
-					}
-				});
-			}
+			// Visibility change handler will be set up in onMount with proper cleanup
 		},
 		onRegisterError(error) {
 			console.error('SW registration error', error);
 		}
 	});
 
+	// Track if user clicked reload (vs dismiss)
+	let userWantsUpdate = false;
+
 	const handleUpdate = () => {
-		// This function's only job is to tell the service worker to update.
-		// The 'controllerchange' listener below will handle the reload.
 		if ($needRefresh) {
+			userWantsUpdate = true;
 			updateServiceWorker(true);
 		}
 	};
 
-	onMount(() => {
-		// This listener is the key. It waits for the new service worker to take control.
-		// Once it does, we can safely reload the page to get the new content.
-		// We only need to register this listener once.
-		const onControllerChange = () => {
-			window.location.reload();
-		};
+	// Event listeners with proper cleanup to prevent leaks
+	let controllerChangeHandler: (() => void) | null = null;
+	let visibilityChangeHandler: (() => void) | null = null;
+	let registration: ServiceWorkerRegistration | null = null;
 
-		if (navigator.serviceWorker) {
-			navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
-		}
+	onMount(async () => {
+		if (typeof navigator === 'undefined' || !navigator.serviceWorker) return;
 
-		// Cleanup the listener when the component is destroyed
-		return () => {
-			if (navigator.serviceWorker) {
-				navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+		// Set up controllerchange listener
+		controllerChangeHandler = () => {
+			if (userWantsUpdate) {
+				window.location.reload();
 			}
 		};
+		navigator.serviceWorker.addEventListener('controllerchange', controllerChangeHandler);
+
+		// Get service worker registration for visibility change updates
+		try {
+			registration = await navigator.serviceWorker.ready;
+
+			visibilityChangeHandler = () => {
+				if (document.visibilityState === 'visible' && registration) {
+					registration.update();
+				}
+			};
+			document.addEventListener('visibilitychange', visibilityChangeHandler);
+		} catch (error) {
+			console.error('Failed to get service worker registration:', error);
+		}
+	});
+
+	onDestroy(() => {
+		// Clean up event listeners to prevent leaks
+		if (controllerChangeHandler && typeof navigator !== 'undefined' && navigator.serviceWorker) {
+			navigator.serviceWorker.removeEventListener('controllerchange', controllerChangeHandler);
+		}
+		if (visibilityChangeHandler) {
+			document.removeEventListener('visibilitychange', visibilityChangeHandler);
+		}
 	});
 </script>
 
