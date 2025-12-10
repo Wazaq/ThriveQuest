@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { useRegisterSW } from 'virtual:pwa-register/svelte';
 	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/environment';
 
 	const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
 		onRegistered(r) {
@@ -12,11 +13,16 @@
 		}
 	});
 
+	// Guards against false positives from vite-plugin-pwa
+	// The plugin can set stores to true even when there's no actual update/install
+	let hasVerifiedUpdate = $state(false);
+	let hasVerifiedOfflineReady = $state(false);
+
 	// Track if user clicked reload (vs dismiss)
 	let userWantsUpdate = false;
 
 	const handleUpdate = () => {
-		if ($needRefresh) {
+		if ($needRefresh && hasVerifiedUpdate) {
 			userWantsUpdate = true;
 			updateServiceWorker(true);
 		}
@@ -27,8 +33,10 @@
 	let visibilityChangeHandler: (() => void) | null = null;
 	let registration: ServiceWorkerRegistration | null = null;
 
+	const SW_INSTALLED_KEY = 'thrivequest-sw-installed';
+
 	onMount(async () => {
-		if (typeof navigator === 'undefined' || !navigator.serviceWorker) return;
+		if (!browser || !navigator.serviceWorker) return;
 
 		// Set up controllerchange listener
 		controllerChangeHandler = () => {
@@ -41,6 +49,42 @@
 		// Get service worker registration for visibility change updates
 		try {
 			registration = await navigator.serviceWorker.ready;
+
+			// Guard: Only show needRefresh if there's actually a waiting service worker
+			if ($needRefresh) {
+				if (registration.waiting) {
+					hasVerifiedUpdate = true;
+				} else {
+					// False positive - no actual waiting SW
+					needRefresh.set(false);
+				}
+			}
+
+			// Guard: Only show offlineReady on genuine first install
+			// Not on subsequent page loads where SW is already active
+			if ($offlineReady) {
+				const wasAlreadyInstalled = sessionStorage.getItem(SW_INSTALLED_KEY);
+				if (wasAlreadyInstalled) {
+					// False positive - SW was already installed before this session
+					offlineReady.set(false);
+				} else {
+					// Genuine first install - mark it and show banner
+					sessionStorage.setItem(SW_INSTALLED_KEY, 'true');
+					hasVerifiedOfflineReady = true;
+				}
+			}
+
+			// Listen for future waiting SW (real updates during session)
+			registration.addEventListener('updatefound', () => {
+				const newWorker = registration?.installing;
+				if (newWorker) {
+					newWorker.addEventListener('statechange', () => {
+						if (newWorker.state === 'installed' && registration?.waiting) {
+							hasVerifiedUpdate = true;
+						}
+					});
+				}
+			});
 
 			visibilityChangeHandler = () => {
 				if (document.visibilityState === 'visible' && registration) {
@@ -64,7 +108,7 @@
 	});
 </script>
 
-{#if $needRefresh}
+{#if $needRefresh && hasVerifiedUpdate}
 	<div
 		class="bg-primary fixed right-4 bottom-4 left-4 z-50 flex items-center justify-between gap-3 rounded-lg p-4 text-white shadow-lg sm:right-4 sm:left-auto sm:max-w-md"
 		role="alert"
@@ -81,7 +125,10 @@
 				Reload
 			</button>
 			<button
-				onclick={() => needRefresh.set(false)}
+				onclick={() => {
+					needRefresh.set(false);
+					hasVerifiedUpdate = false;
+				}}
 				class="rounded-md border border-white/30 px-4 py-2 text-sm font-medium transition-colors hover:bg-white/10"
 			>
 				Later
@@ -90,7 +137,7 @@
 	</div>
 {/if}
 
-{#if $offlineReady}
+{#if $offlineReady && hasVerifiedOfflineReady}
 	<div
 		class="fixed right-4 bottom-4 left-4 z-50 flex items-center justify-between gap-3 rounded-lg bg-gray-900 p-4 text-white shadow-lg sm:right-4 sm:left-auto sm:max-w-md"
 		role="alert"
@@ -99,7 +146,10 @@
 			<p class="font-medium">App ready for offline use</p>
 		</div>
 		<button
-			onclick={() => offlineReady.set(false)}
+			onclick={() => {
+				offlineReady.set(false);
+				hasVerifiedOfflineReady = false;
+			}}
 			class="rounded-md border border-white/30 px-4 py-2 text-sm font-medium transition-colors hover:bg-white/10"
 		>
 			OK
