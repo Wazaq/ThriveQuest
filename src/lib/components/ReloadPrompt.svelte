@@ -2,88 +2,56 @@
 	import { useRegisterSW } from 'virtual:pwa-register/svelte';
 	import { onMount } from 'svelte';
 
-	let userClickedReload = false;
-	let showBanner = $state(true);
-
-	// Check if user recently dismissed the update banner or just completed an update
-	onMount(() => {
-		if (typeof localStorage !== 'undefined') {
-			// If we just completed an update, clear the flag and hide banner
-			const updateInProgress = localStorage.getItem('pwa-update-in-progress');
-			if (updateInProgress) {
-				localStorage.removeItem('pwa-update-in-progress');
-				showBanner = false;
-				return;
-			}
-
-			// Otherwise, check if user dismissed recently
-			const dismissed = localStorage.getItem('pwa-update-dismissed');
-			if (dismissed) {
-				const dismissedTime = parseInt(dismissed);
-				const oneHourAgo = Date.now() - 60 * 60 * 1000;
-
-				// Hide banner if dismissed within the last hour
-				if (dismissedTime > oneHourAgo) {
-					showBanner = false;
-				}
-			}
-		}
-	});
-
 	const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
 		onRegistered(r) {
-			console.log('Service Worker registered');
-			// Check for updates every 60 seconds
-			if (r) {
-				setInterval(() => {
-					console.log('Checking for SW updates...');
+			if (!r) return;
+
+			// A more robust and battery-friendly way to check for updates.
+			// This checks when the user re-focuses the tab.
+			document.addEventListener('visibilitychange', () => {
+				if (document.visibilityState === 'visible') {
 					r.update();
-				}, 60000);
-			}
+				}
+			});
 		},
 		onRegisterError(error) {
 			console.error('SW registration error', error);
 		}
 	});
 
-	// When user clicks "Reload", tell the new SW to take control
 	const handleUpdate = () => {
+		// This function's only job is to tell the service worker to update.
+		// The 'controllerchange' listener below will handle the reload.
 		if ($needRefresh) {
-			userClickedReload = true;
-
-			// Mark that we're updating (so we don't show banner after reload completes)
-			if (typeof localStorage !== 'undefined') {
-				localStorage.setItem('pwa-update-in-progress', 'true');
-			}
-
 			updateServiceWorker(true);
 		}
 	};
 
-	// The 'controllerchange' event fires when the new service worker has taken over.
-	// Only reload if the user actually clicked "Reload" (not "Later")
-	if (typeof navigator !== 'undefined' && navigator.serviceWorker) {
-		navigator.serviceWorker.addEventListener('controllerchange', () => {
-			if (userClickedReload) {
-				window.location.reload();
-			}
-		});
-	}
+	onMount(() => {
+		// This listener is the key. It waits for the new service worker to take control.
+		// Once it does, we can safely reload the page to get the new content.
+		// We only need to register this listener once.
+		const onControllerChange = () => {
+			window.location.reload();
+		};
 
-	function close() {
-		offlineReady.set(false);
-		needRefresh.set(false);
-
-		// Store dismissal in localStorage to prevent showing again on navigation
-		if (typeof localStorage !== 'undefined') {
-			localStorage.setItem('pwa-update-dismissed', Date.now().toString());
+		if (navigator.serviceWorker) {
+			navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
 		}
-	}
+
+		// Cleanup the listener when the component is destroyed
+		return () => {
+			if (navigator.serviceWorker) {
+				navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+			}
+		};
+	});
 </script>
 
-{#if $needRefresh && showBanner}
+{#if $needRefresh}
 	<div
 		class="bg-primary fixed right-4 bottom-4 left-4 z-50 flex items-center justify-between gap-3 rounded-lg p-4 text-white shadow-lg sm:right-4 sm:left-auto sm:max-w-md"
+		role="alert"
 	>
 		<div class="flex-1">
 			<p class="font-medium">New version available</p>
@@ -97,7 +65,7 @@
 				Reload
 			</button>
 			<button
-				onclick={close}
+				onclick={() => needRefresh.set(false)}
 				class="rounded-md border border-white/30 px-4 py-2 text-sm font-medium transition-colors hover:bg-white/10"
 			>
 				Later
@@ -109,12 +77,13 @@
 {#if $offlineReady}
 	<div
 		class="fixed right-4 bottom-4 left-4 z-50 flex items-center justify-between gap-3 rounded-lg bg-gray-900 p-4 text-white shadow-lg sm:right-4 sm:left-auto sm:max-w-md"
+		role="alert"
 	>
 		<div class="flex-1">
 			<p class="font-medium">App ready for offline use</p>
 		</div>
 		<button
-			onclick={close}
+			onclick={() => offlineReady.set(false)}
 			class="rounded-md border border-white/30 px-4 py-2 text-sm font-medium transition-colors hover:bg-white/10"
 		>
 			OK
