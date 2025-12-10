@@ -8,6 +8,9 @@ export default defineConfig({
 		tailwindcss(),
 		sveltekit(),
 		VitePWA({
+			strategies: 'injectManifest',
+			srcDir: 'src',
+			filename: 'service-worker.ts',
 			registerType: 'prompt',
 			injectRegister: 'auto',
 			manifest: {
@@ -30,26 +33,11 @@ export default defineConfig({
 				],
 				categories: ['health', 'lifestyle', 'productivity']
 			},
-			workbox: {
-				// Cache static assets
-				globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2}'],
-				// Runtime caching for API calls
-				runtimeCaching: [
-					{
-						urlPattern: /^https:\/\/.*\.cloudflare\.com\/.*/i,
-						handler: 'NetworkFirst',
-						options: {
-							cacheName: 'cloudflare-cache',
-							expiration: {
-								maxEntries: 50,
-								maxAgeSeconds: 60 * 60 * 24 // 24 hours
-							}
-						}
-					}
-				]
+			injectManifest: {
+				globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2}']
 			},
 			devOptions: {
-				enabled: false // Set to true if you want to test in dev mode
+				enabled: false
 			}
 		})
 	]
