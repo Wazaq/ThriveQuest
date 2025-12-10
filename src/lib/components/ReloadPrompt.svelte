@@ -5,9 +5,18 @@
 	let userClickedReload = false;
 	let showBanner = $state(true);
 
-	// Check if user recently dismissed the update banner
+	// Check if user recently dismissed the update banner or just completed an update
 	onMount(() => {
 		if (typeof localStorage !== 'undefined') {
+			// If we just completed an update, clear the flag and hide banner
+			const updateInProgress = localStorage.getItem('pwa-update-in-progress');
+			if (updateInProgress) {
+				localStorage.removeItem('pwa-update-in-progress');
+				showBanner = false;
+				return;
+			}
+
+			// Otherwise, check if user dismissed recently
 			const dismissed = localStorage.getItem('pwa-update-dismissed');
 			if (dismissed) {
 				const dismissedTime = parseInt(dismissed);
@@ -42,9 +51,9 @@
 		if ($needRefresh) {
 			userClickedReload = true;
 
-			// Clear dismissal flag since they're applying the update
+			// Mark that we're updating (so we don't show banner after reload completes)
 			if (typeof localStorage !== 'undefined') {
-				localStorage.removeItem('pwa-update-dismissed');
+				localStorage.setItem('pwa-update-in-progress', 'true');
 			}
 
 			updateServiceWorker(true);
