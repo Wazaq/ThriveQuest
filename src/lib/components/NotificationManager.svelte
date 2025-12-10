@@ -18,18 +18,15 @@
 			return;
 		}
 
-		// Register service worker if not already registered
-		try {
-			await navigator.serviceWorker.register('/service-worker.js');
-		} catch (error) {
-			console.error('Service worker registration failed:', error);
-		}
+		// Use the existing service worker from vite-plugin-pwa
+		// Don't register a new one - it causes conflicts with PWA update detection
 
 		// Check current permission status
 		permissionStatus = Notification.permission;
 
 		// Check if already subscribed
 		if (permissionStatus === 'granted') {
+			// Wait for the PWA service worker to be ready
 			const registration = await navigator.serviceWorker.ready;
 			const subscription = await registration.pushManager.getSubscription();
 			isSubscribed = !!subscription;
