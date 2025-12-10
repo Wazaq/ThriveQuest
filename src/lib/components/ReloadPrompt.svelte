@@ -1,18 +1,27 @@
 <script lang="ts">
 	import { useRegisterSW } from 'virtual:pwa-register/svelte';
 	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
+
+	// Check if we're on dev environment
+	let isDev =
+		browser &&
+		(window.location.hostname === 'dev.thrivequest.app' ||
+			window.location.hostname.includes('dev.'));
 
 	const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
 		onRegistered(r) {
 			if (!r) return;
 
-			// A more robust and battery-friendly way to check for updates.
-			// This checks when the user re-focuses the tab.
-			document.addEventListener('visibilitychange', () => {
-				if (document.visibilityState === 'visible') {
-					r.update();
-				}
-			});
+			// In production, check for updates when tab becomes visible
+			// In dev, don't auto-check (too many deployments cause confusion)
+			if (!isDev) {
+				document.addEventListener('visibilitychange', () => {
+					if (document.visibilityState === 'visible') {
+						r.update();
+					}
+				});
+			}
 		},
 		onRegisterError(error) {
 			console.error('SW registration error', error);
