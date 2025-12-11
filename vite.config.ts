@@ -8,9 +8,6 @@ export default defineConfig({
 		tailwindcss(),
 		sveltekit(),
 		VitePWA({
-			strategies: 'injectManifest',
-			srcDir: 'src',
-			filename: 'service-worker.ts',
 			registerType: 'prompt',
 			injectRegister: 'auto',
 			manifest: {
@@ -33,8 +30,12 @@ export default defineConfig({
 				],
 				categories: ['health', 'lifestyle', 'productivity']
 			},
-			injectManifest: {
-				globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2}']
+			workbox: {
+				globPatterns: ['**/*.{js,css,svg,png,ico,woff,woff2}'],
+				// Import push notification handlers
+				importScripts: ['/push-handler.js'],
+				// Skip the index.html navigation fallback since SvelteKit doesn't generate it
+				navigateFallback: null
 			},
 			devOptions: {
 				enabled: false
