@@ -21,7 +21,7 @@
 
 <div class="space-y-3">
 	{#if quests.length === 0}
-		<p class="py-8 text-center text-gray-600 dark:text-gray-400">
+		<p class="py-8 text-center text-gray-600 dark:text-quest-muted">
 			No quests available yet. Check back soon!
 		</p>
 	{:else}
