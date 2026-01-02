@@ -128,7 +128,7 @@
 		<footer class="mt-12 border-t border-gray-200 bg-white dark:border-quest-slate/30 dark:bg-quest-slate/50">
 			<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
 				<div class="flex flex-col items-center gap-3 text-sm text-gray-600 dark:text-quest-muted">
-					<p>ThriveQuest - Your daily wellness companion</p>
+					<p>ThriveQuest - Your daily wellness companion <span class="text-xs opacity-50">v0.1</span></p>
 					<div class="flex gap-4">
 						<a
 							href="https://forms.gle/8jFDRrrZNcvjS3tZ7"

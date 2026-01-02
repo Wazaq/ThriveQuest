@@ -12,4 +12,22 @@
 	--color-relationships: #ec4899; /* pink-500 - Relationships */
 	--color-meaning: #8b5cf6; /* violet-500 - Meaning */
 	--color-accomplishment: #10b981; /* emerald-500 - Accomplishment */
+
+	/* Cosmic Palette - "The Midnight Nebula" */
+	--color-quest-black: #050B10; /* Deep background */
+	--color-quest-slate: #0D1E26; /* Surface/Card background */
+	--color-quest-teal: #14F1FF; /* Primary glow (neon teal) */
+	--color-quest-blue: #2B65FF; /* Secondary accent */
+	--color-quest-gold: #FFB800; /* Accent (sun/completion) */
+	--color-quest-text: #E2E8F0; /* Primary text */
+	--color-quest-muted: #64748B; /* Muted text */
+
+	/* Cosmic Shadows */
+	--shadow-glow: 0 0 15px -3px rgba(20, 241, 255, 0.5);
+	--shadow-glow-lg: 0 0 25px -5px rgba(20, 241, 255, 0.6);
+	--shadow-glow-gold: 0 0 15px -3px rgba(255, 184, 0, 0.5);
+
+	/* Cosmic Backgrounds */
+	--background-image-nebula-gradient: radial-gradient(circle at top, #1e293b 0%, #050b10 100%);
+	--background-image-cosmic-radial: radial-gradient(circle at 50% 0%, rgba(20, 241, 255, 0.1) 0%, transparent 50%);
 }
