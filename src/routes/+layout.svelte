@@ -31,19 +31,19 @@
 </svelte:head>
 
 <div
-	class="min-h-screen bg-gray-50 text-gray-900 transition-colors dark:bg-gray-900 dark:text-gray-50"
+	class="min-h-screen bg-gray-50 text-gray-900 transition-colors dark:bg-quest-black dark:bg-nebula-gradient dark:text-quest-text"
 >
 	{#if !isAuthPage && data?.user}
 		<!-- Header -->
 		<header
-			class="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
+			class="sticky top-0 z-10 border-b border-gray-200 bg-white backdrop-blur-md dark:border-quest-slate/30 dark:bg-quest-slate/80"
 		>
 			<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div class="flex h-16 items-center justify-between">
 					<!-- Logo / Brand -->
 					<a href="/" class="flex items-center gap-2">
 						<span class="text-2xl">🌱</span>
-						<span class="text-primary text-xl font-bold">ThriveQuest</span>
+						<span class="text-xl font-bold text-primary dark:text-quest-teal">ThriveQuest</span>
 						<DevBadge />
 					</a>
 
@@ -51,22 +51,22 @@
 					<nav class="hidden items-center gap-6 md:flex">
 						<a
 							href="/"
-							class="hover:text-primary font-medium text-gray-900 transition-colors dark:text-gray-100"
+							class="font-medium text-gray-900 transition-colors hover:text-primary dark:text-quest-text dark:hover:text-quest-teal"
 							>Dashboard</a
 						>
 						<a
 							href="/journal"
-							class="hover:text-primary font-medium text-gray-900 transition-colors dark:text-gray-100"
+							class="font-medium text-gray-900 transition-colors hover:text-primary dark:text-quest-text dark:hover:text-quest-teal"
 							>Journal</a
 						>
 						<a
 							href="/settings"
-							class="hover:text-primary font-medium text-gray-900 transition-colors dark:text-gray-100"
+							class="font-medium text-gray-900 transition-colors hover:text-primary dark:text-quest-text dark:hover:text-quest-teal"
 							>Settings</a
 						>
 						<a
 							href="/about"
-							class="hover:text-primary font-medium text-gray-900 transition-colors dark:text-gray-100"
+							class="font-medium text-gray-900 transition-colors hover:text-primary dark:text-quest-text dark:hover:text-quest-teal"
 							>About</a
 						>
 					</nav>
@@ -95,22 +95,22 @@
 				<nav class="flex gap-4 overflow-x-auto pb-3 md:hidden">
 					<a
 						href="/"
-						class="hover:text-primary text-sm whitespace-nowrap text-gray-700 transition-colors dark:text-gray-300"
+						class="whitespace-nowrap text-sm text-gray-700 transition-colors hover:text-primary dark:text-quest-text dark:hover:text-quest-teal"
 						>Dashboard</a
 					>
 					<a
 						href="/journal"
-						class="hover:text-primary text-sm whitespace-nowrap text-gray-700 transition-colors dark:text-gray-300"
+						class="whitespace-nowrap text-sm text-gray-700 transition-colors hover:text-primary dark:text-quest-text dark:hover:text-quest-teal"
 						>Journal</a
 					>
 					<a
 						href="/settings"
-						class="hover:text-primary text-sm whitespace-nowrap text-gray-700 transition-colors dark:text-gray-300"
+						class="whitespace-nowrap text-sm text-gray-700 transition-colors hover:text-primary dark:text-quest-text dark:hover:text-quest-teal"
 						>Settings</a
 					>
 					<a
 						href="/about"
-						class="hover:text-primary text-sm whitespace-nowrap text-gray-700 transition-colors dark:text-gray-300"
+						class="whitespace-nowrap text-sm text-gray-700 transition-colors hover:text-primary dark:text-quest-text dark:hover:text-quest-teal"
 						>About</a
 					>
 				</nav>
@@ -125,16 +125,16 @@
 
 	{#if !isAuthPage && data?.user}
 		<!-- Footer -->
-		<footer class="mt-12 border-t border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
+		<footer class="mt-12 border-t border-gray-200 bg-white dark:border-quest-slate/30 dark:bg-quest-slate/50">
 			<div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-				<div class="flex flex-col items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+				<div class="flex flex-col items-center gap-3 text-sm text-gray-600 dark:text-quest-muted">
 					<p>ThriveQuest - Your daily wellness companion</p>
 					<div class="flex gap-4">
 						<a
 							href="https://forms.gle/8jFDRrrZNcvjS3tZ7"
 							target="_blank"
 							rel="noopener noreferrer"
-							class="hover:text-primary flex items-center gap-1 transition-colors"
+							class="flex items-center gap-1 transition-colors hover:text-primary dark:hover:text-quest-teal"
 						>
 							<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 								<path

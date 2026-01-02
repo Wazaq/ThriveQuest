@@ -84,8 +84,10 @@
 <div class="space-y-6">
 	<!-- Header -->
 	<div>
-		<h1 class="mb-2 text-3xl font-bold text-gray-900 dark:text-gray-100">Ready to thrive? 🌟</h1>
-		<p class="text-gray-600 dark:text-gray-400">
+		<h1 class="mb-2 text-3xl font-bold tracking-wide text-gray-900 dark:text-quest-text">
+			Ready to thrive? 🌟
+		</h1>
+		<p class="text-base leading-relaxed text-gray-600 dark:text-quest-muted">
 			5 daily quests to build your wellness journey. Let's go!
 		</p>
 	</div>
@@ -100,8 +102,10 @@
 	<!-- Daily Quests -->
 	<div>
 		<div class="mb-4">
-			<h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Today's Quests</h2>
-			<p class="text-sm text-gray-600 dark:text-gray-400">
+			<h2 class="text-xl font-semibold tracking-wide text-gray-900 dark:text-quest-text">
+				Today's Quests
+			</h2>
+			<p class="text-sm text-gray-600 dark:text-quest-muted">
 				5 curated quests across all PERMA domains • Refreshes daily at midnight
 			</p>
 		</div>
