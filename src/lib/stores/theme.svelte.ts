@@ -4,15 +4,14 @@ import { browser } from '$app/environment';
 type Theme = 'light' | 'dark';
 
 class ThemeStore {
-	theme = $state<Theme>('light');
+	theme = $state<Theme>('dark'); // Default to dark mode for cosmic design
 
 	constructor() {
 		if (browser) {
-			// Load saved theme or detect system preference
+			// Load saved theme or default to dark
 			const saved = localStorage.getItem('theme') as Theme;
-			const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-			this.theme = saved || (systemPrefersDark ? 'dark' : 'light');
+			this.theme = saved || 'dark'; // Always default to dark mode
 			this.applyTheme();
 		}
 	}
